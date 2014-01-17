@@ -24,6 +24,7 @@ h1 {
 	display: table-cell;
 	vertical-align: middle;
 	padding-bottom: 2em;
+	background-position: center center;
 }
 
 .content {
