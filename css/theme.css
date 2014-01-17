@@ -13,6 +13,7 @@ html {
 	min-height: 100%;
 
 	background-size: 1024px 768px;
+	background-position: center center;
 }
 
 h1 {
@@ -24,7 +25,6 @@ h1 {
 	display: table-cell;
 	vertical-align: middle;
 	padding-bottom: 2em;
-	background-position: center center;
 }
 
 .content {
