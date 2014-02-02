@@ -1,39 +1,139 @@
 html {
-	background: #ffc000; /* Old browsers */
-	background: -moz-radial-gradient(center, ellipse cover,  #ffc000 0%, #ff8900 100%); /* FF3.6+ */
-	background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,#ffc000), color-stop(100%,#ff8900)); /* Chrome,Safari4+ */
-	background: -webkit-radial-gradient(center, ellipse cover,  #ffc000 0%,#ff8900 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-radial-gradient(center, ellipse cover,  #ffc000 0%,#ff8900 100%); /* Opera 12+ */
-	background: -ms-radial-gradient(center, ellipse cover,  #ffc000 0%,#ff8900 100%); /* IE10+ */
-	background: radial-gradient(ellipse at center,  #ffc000 0%,#ff8900 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffc000', endColorstr='#ff8900',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+	background: #25aae1; /* Old browsers */
+	background: -moz-linear-gradient(top, #25aae1 50%, #ffa9bc 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(50%,#25aae1), color-stop(100%,#ffa9bc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #25aae1 50%,#ffa9bc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #25aae1 50%,#ffa9bc 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #25aae1 50%,#ffa9bc 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #25aae1 50%,#ffa9bc 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#25aae1', endColorstr='#ffa9bc',GradientType=0 ); /* IE6-9 */
 
 
-	height: 100%;
-	min-height: 100%;
-
-	background-size: 1024px 768px;
-	background-position: center center;
 }
 
 h1 {
 	font-family: 'Shadows Into Light Two', cursive;
 	/** color: #8E680A; **/
 	color: #000000;
-	opacity: 0.55;
-	font-size: 75px;
-	display: table-cell;
-	vertical-align: middle;
-	padding-bottom: 2em;
+	opacity: 1;
+	font-size: 50px;
+	//display: table-cell;
+	//vertical-align: middle;
+	//padding-bottom: 2em;
 }
 
 .content {
 	text-align: center;
 	height: 100%;
-	display: table;
+	//display: table;
 }
+
+.fixed { position: fixed; }
 
 body {
 	background-color: transparent;
 	height: 100%;
 }
+
+
+/********************************************************
+		MAIN CONTENT STYLES
+********************************************************/
+
+.logo {
+	margin-bottom: 30px;
+}
+
+.intro h1 {
+	display: inline;
+	padding: 0 5%;
+	color: #FFFFFF;
+}
+
+.intro h1.and {
+	color: #FFA9BC;
+}
+
+.characters {
+}
+
+.brad, .beth {
+	/**
+	min-height: 300px;
+	position: relative;
+	float: left;
+	**/
+	display: inline;
+}
+
+.brad .body, .beth .body {
+	/**
+	display: block;
+	width: 100px;
+	height: 150px;
+	margin: 0px auto;
+	**/
+}
+
+.brad img,
+.beth img {
+	width: 150px;
+}
+
+.brad .body {
+	//background-color: red;
+}
+
+.beth .body {
+	//background-color: yellow;
+}
+
+.about-brad {
+	background-color: #333333;
+}
+
+
+
+/********************************************************
+		MEDIA QUERIES
+********************************************************/
+
+@media (min-width: 400px) { 
+	.brad img,
+	.beth img {
+		width: 175px;
+	}
+}
+
+@media (min-width: 500px) { 
+	.brad img,
+	.beth img {
+		width: 200px;
+	}
+}
+
+/* Extra small devices (phones, less than 768px) */
+/* No media query since this is the default in Bootstrap */
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+	.intro h1 {
+		padding: 0 3.5%;
+	}
+
+	h1 {
+		font-size: 75px;
+	}
+
+	.brad img,
+	.beth img {
+		width: 300px;
+	}
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) { }
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) { }
+
