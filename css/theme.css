@@ -30,6 +30,8 @@ h1 {
 
 .fixed { position: fixed; }
 
+.gone { visibility: hidden; }
+
 body {
 	background-color: transparent;
 	height: 100%;
@@ -78,6 +80,7 @@ body {
 .brad img,
 .beth img {
 	width: 150px;
+	z-index: 1000;
 }
 
 .brad .body {
