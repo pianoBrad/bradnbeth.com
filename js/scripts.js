@@ -1,16 +1,17 @@
 var slide_transition = function(index, direction) {
 	if ( index == 1 && direction == 'down' ) {
 		console.log('going down!!');
-		$('.brad .fixed').attr('src','images/brad-falling.svg');
+		$('.brad .wrap').css('background-image','url("images/brad-falling.svg")');
 	} else if ( index == 2 && direction == 'up') {
 		console.log('heading back up!!');
-		$('.brad .fixed').attr('src','images/brad-falling.svg');
+		$('.brad .fixed').css('background-image','url("images/brad-falling.svg")');
 	}
 }
 
 var slide_loaded = function(anchorLink, index) {
 	if ( index == 2 || index == 1 ) {
-		$('.brad .fixed').attr('src','images/brad.svg')
+		currentHeight = $('.brad .fixed').outerHeight();
+		$('.brad .fixed').css('background-image','url("images/brad.svg")');
 	}
 }
 
@@ -24,4 +25,5 @@ $(document).ready(function() {
 			slide_transition(index, direction);
 		}
 	});
+
 });
