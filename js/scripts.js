@@ -21,16 +21,16 @@ var slide_transition = function(index, direction) {
 
 	if ( index == 1 && direction == 'down' ) {
 		console.log('going down!!');
-		$('.brad .wrap.fixed').css('background-image','url("images/brad-falling.svg")');
+		$('.brad .wrap.fixed').css('background-image','url("images/brad-falling.svg")').css('top','inherit');
 	} else if ( index == 2 && direction == 'up') {
 		console.log('heading back up!!');
-		$('.brad .wrap').addClass('fixed').css('background-image','url("images/brad-falling.svg")');
+		$('.brad .wrap').addClass('fixed').css('background-image','url("images/brad-falling.svg")').css('top', $('.brad').position().top);
 	}
 }
 
 var slide_loaded = function(anchorLink, index) {
 	if ( index == 1 && $('.section.intro .brad').length == 0 ) {
-		$('.about-brad .brad').prependTo('.section.intro .characters').children('.wrap');
+		$('.about-brad .brad').prependTo('.section.intro .characters').children('.wrap').addClass('fixed').css('top','inherit');
 	}
 	if ( index == 2 || index == 1 ) {
 		currentHeight = $('.brad .fixed').outerHeight();
@@ -40,7 +40,7 @@ var slide_loaded = function(anchorLink, index) {
 		$('.section.intro .brad').prependTo('.about-brad .characters').children('.wrap').removeClass('fixed');
 	}
 	if ( index == 3 && $('.about-brad .brad').length == 0 ) {
-		$('.brad').prependTo('.about-brad .characters').children('.wrap').removeClass('fixed');
+		$('.brad').prependTo('.about-brad .characters').children('.wrap').removeClass('fixed').css('top','auto');
 	}
 }
 
