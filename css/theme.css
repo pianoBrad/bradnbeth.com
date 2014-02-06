@@ -7,18 +7,6 @@
 
 ****************************************/
 
-html {
-	background: #25aae1; /* Old browsers */
-	background: -moz-linear-gradient(top, #25aae1 50%, #ffa9bc 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(50%,#25aae1), color-stop(100%,#ffa9bc)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #25aae1 50%,#ffa9bc 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #25aae1 50%,#ffa9bc 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #25aae1 50%,#ffa9bc 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #25aae1 50%,#ffa9bc 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#25aae1', endColorstr='#ffa9bc',GradientType=0 ); /* IE6-9 */
-
-
-}
 
 h1 {
 	font-family: 'Shadows Into Light Two', cursive;
@@ -37,7 +25,9 @@ h1 {
 	//display: table;
 }
 
-.fixed { position: fixed; }
+.fixed { 
+	position: fixed;
+}
 
 .gone { visibility: hidden; }
 
@@ -51,17 +41,29 @@ body {
 		MAIN CONTENT STYLES
 ********************************************************/
 
-.logo {
-	margin-bottom: 30px;
+.section.intro {
+	background: #25aae1; /* Old browsers */
+	background: -moz-linear-gradient(top, #25aae1 50%, #ffa9bc 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(50%,#25aae1), color-stop(100%,#ffa9bc)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #25aae1 50%,#ffa9bc 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #25aae1 50%,#ffa9bc 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #25aae1 50%,#ffa9bc 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #25aae1 50%,#ffa9bc 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#25aae1', endColorstr='#ffa9bc',GradientType=0 ); /* IE6-9 */
 }
 
-.intro h1 {
+.logo {
+	margin-bottom: 30px;
+	text-align: center;
+}
+
+.logo h1 {
 	display: inline;
 	padding: 0 5%;
 	color: #FFFFFF;
 }
 
-.intro h1.and {
+.logo h1.and {
 	color: #FFA9BC;
 }
 
@@ -87,6 +89,18 @@ body {
 	**/
 }
 
+.section.intro .brad,
+.section.intro .beth {
+	position: relative;
+	float: left;
+	width: 50%;
+	min-height: 150px;
+}
+
+.section.intro .beth {
+	float: right;
+}
+
 .brad img,
 .beth img {
 	width: 150px;
@@ -103,17 +117,38 @@ body {
 	background-repeat: no-repeat;
 }
 
+.brad .wrap a,
+.beth .wrap a {
+	display: block;
+	height: 100%;
+	width: 150px;
+	position: relative;
+	float: right;
+}
+
+.section.intro .beth .wrap a { float: left; }
+
 .brad .wrap {
 	background-image: url('../images/brad.svg');
 	background-position: 80% center;
 	z-index: 1000;
+	position: relative;
+	float: right;
+	width: 100%;
+}
+
+.brad .wrap.fixed {
+	position: fixed;
+	float: none;
+	width: 50%;
+	left: 0px;
 }
 
 .beth .wrap {
 	background-image: url('../images/beth.svg');
 	background-position: 20% center;
 	position: relative;
-	left: 50%;
+	width: 100%;
 }
 
 .brad .body {
@@ -128,7 +163,38 @@ body {
 	background-color: #333333;
 }
 
+/********************************************************
+		ABOUT BRAD SECTION
+********************************************************/
 
+.about-brad .and,
+.about-brad .beth-text {
+	visibility: hidden;
+}
+
+.about-brad .brad {
+	width: 50%;
+	display: block;
+}
+
+/********************************************************
+		ABOUT BETH SECTION
+********************************************************/
+
+.section.about-beth {
+	background-color: #008080;
+}
+
+.about-beth .brad-text,
+.about-beth .and {
+	visibility: hidden;
+}
+
+.about-beth .beth {
+	display: block;
+	width: 50%;
+	float: right;
+}
 
 /********************************************************
 		MEDIA QUERIES
@@ -149,6 +215,11 @@ body {
 	.beth .wrap {
 		height: 175px;
 	}
+
+	.brad .wrap a,
+	.beth .wrap a {
+		width: 175px;
+	}
 }
 
 @media (min-width: 500px) { 
@@ -166,6 +237,11 @@ body {
 	.beth .wrap {
 		height: 200px;
 	}
+
+	.brad .wrap a,
+	.beth .wrap a {
+		width: 200px;
+	}
 }
 
 /* Extra small devices (phones, less than 768px) */
@@ -173,7 +249,7 @@ body {
 
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
-	.intro h1 {
+	.logo h1 {
 		padding: 0 3.5%;
 	}
 
@@ -197,6 +273,11 @@ body {
 
 	.brad .wrap { background-position: 95% center; }
 	.beth .wrap { background-position: 5% center; }
+
+	.brad .wrap a,
+	.beth .wrap a {
+		width: 300px;
+	}
 }
 
 /* Medium devices (desktops, 992px and up) */
