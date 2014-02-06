@@ -21,10 +21,10 @@ var slide_transition = function(index, direction) {
 
 	if ( index == 1 && direction == 'down' ) {
 		console.log('going down!!');
-		$('.brad .wrap.fixed').css('background-image','url("images/brad-falling.svg")').css('top','inherit');
+		$('.brad .wrap.fixed').removeClass('pose-normal').addClass('pose-falling').css('top','inherit');
 	} else if ( index == 2 && direction == 'up') {
 		console.log('heading back up!!');
-		$('.brad .wrap').addClass('fixed').css('background-image','url("images/brad-falling.svg")').css('top', $('.brad').position().top);
+		$('.brad .wrap').addClass('fixed').removeClass('pose-normal').addClass('pose-falling').css('top', $('.brad').position().top);
 	}
 }
 
@@ -34,7 +34,7 @@ var slide_loaded = function(anchorLink, index) {
 	}
 	if ( index == 2 || index == 1 ) {
 		currentHeight = $('.brad .fixed').outerHeight();
-		$('.brad .fixed').css('background-image','url("images/brad.svg")');
+		$('.brad .fixed').removeClass('pose-falling').addClass('pose-normal');
 	}
 	if ( index == 2 ) {
 		$('.section.intro .brad').prependTo('.about-brad .characters').children('.wrap').removeClass('fixed');

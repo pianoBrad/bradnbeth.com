@@ -37,6 +37,18 @@ body {
 }
 
 
+/************ SVG BACKGROUND ANIMATION POSES **************/
+
+.pose-normal {
+	background-position: center top;
+}
+
+.pose-falling,
+.brad .wrap.pose-falling {
+	background-position: 95% -150px;
+}
+
+
 /********************************************************
 		MAIN CONTENT STYLES
 ********************************************************/
@@ -114,7 +126,7 @@ body {
 	width: 50%;
 	height: 150px;
 	display: block;
-	background-size: contain;
+	background-size: 150px auto;
 	background-repeat: no-repeat;
 }
 
@@ -130,8 +142,8 @@ body {
 .section.intro .beth .wrap a { float: left; }
 
 .brad .wrap {
-	background-image: url('../images/brad.svg');
-	background-position: 80% center;
+	background-image: url('../images/brad-sprite-sheet.svg');
+	background-position: 80% top;
 	z-index: 1000;
 	position: relative;
 	float: right;
@@ -215,6 +227,12 @@ body {
 	.brad .wrap,
 	.beth .wrap {
 		height: 175px;
+		background-size: 175px auto;
+	}
+
+	.pose-falling,
+	.brad .wrap.pose-falling {
+		background-position: 95% 175px;
 	}
 
 	.brad .wrap a,
@@ -237,6 +255,12 @@ body {
 	.brad .wrap,
 	.beth .wrap {
 		height: 200px;
+		background-size: 200px auto;
+	}
+
+	.pose-falling,
+	.brad .wrap.pose-falling {
+		background-position: 95% -200px;
 	}
 
 	.brad .wrap a,
@@ -267,13 +291,19 @@ body {
 		width: 300px;
 	}
 
+	.pose-falling,
+	.brad .wrap.pose-falling {
+		background-position: 95% -300px;
+	}
+
 	.brad .wrap,
 	.beth .wrap {
 		height: 300px;
+		background-size: 300px auto;
 	}
 
-	.brad .wrap { background-position: 95% center; }
-	.beth .wrap { background-position: 5% center; }
+	.brad .wrap { background-position: 95% top; }
+	.beth .wrap { background-position: 5% top; }
 
 	.brad .wrap a,
 	.beth .wrap a {
