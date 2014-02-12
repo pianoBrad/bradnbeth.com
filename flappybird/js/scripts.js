@@ -1,6 +1,7 @@
-var bird_height = $('.bird').outerHeight();
-var world_height = $('.world').outerHeight();
-var world_width = $('.world').outerWidth();
+var bird_height;
+var bird_start_position;
+var world_height;
+var world_width;
 var bounce_height = 80;
 var bounce_duration = 350;
 var pipe_width = 85;
@@ -13,6 +14,11 @@ var pipe_vs_bird;
 var current_pipe_position;
 var pipe_top_x;
 var pipe_bottom_x;
+
+var score = 0;
+
+var game_speed = 1500;
+var pipe_speed = 5000;
 
 var collision_test = function(element1, element2) {
       var x1 = element1.offset().left;
@@ -79,18 +85,23 @@ var start_pipe = function() {
 	$('.pipe-wrap').animate({
 		x : -(world_width + pipe_width)+'px'
 	},
-	5000,
+	pipe_speed,
 	'linear' 
 	);
 }
 
 var game_over = function() {
 
+	$('.hud .intro, .hud .score').hide();
+	$('.hud .game-over').show();
+
 	$('.pipe-wrap').stop(true);
 	
 
 	clearInterval(pipe_vs_bird);
 	clearInterval(pipe_assembly);
+
+	$('body').off('click');
 }
 
 var is_pipe_still_next = function() {
@@ -101,6 +112,8 @@ var is_pipe_still_next = function() {
 
 	if ( (current_pipe_position.left + pipe_width) < current_bird_position.left && current_pipe_position.left > 0 ) {
 		console.log('clear!');
+		score++;
+		$('.score .number, .scoreboard .number').html(score);
 		//alert('current pipe x is '+current_pipe_position.left+' + current bird position is '+current_bird_position.left+'..clear!');
 		var cleared_pipe = $('.pipe-wrap.next');
 		var next_pipe = cleared_pipe.next('.pipe-wrap').addClass('next');
@@ -117,7 +130,7 @@ var is_bird_touching = function() {
 	var current_bird_position = get_current_position( $('.bird') );
 	var current_bird_position_top = current_bird_position.top;
 	var current_bird_position_bottom = ( current_bird_position_top + bird_height );
-	
+
 	if ( pipe_top_x < current_bird_position_top  && pipe_bottom_x > current_bird_position_bottom ) {
 		console.log(pipe_top_x+' '+current_bird_position_top+' '+current_bird_position_bottom+' '+pipe_bottom_x);
 		return false;
@@ -127,17 +140,24 @@ var is_bird_touching = function() {
 	}
 }
 
-$(document).ready(function() {
-
-	$(function() {
-            FastClick.attach(document.body);
-    });
-	
+var start_game = function() {
+	//If pipes exist, kill them
+	$('.pipe-wrap').remove();
+	//Make sure bird is in place
+	$('.bird').clearQueue().css('transform','translate(0px,0px)').css('top', bird_start_position.top).css('left', bird_start_position.left );
+	//Restore intro screens
+	$('.game-over').hide();
+	$('.click-to-start').show();
+	$('.intro').show();
+	//Clear score
+	score = 0;
+	$('.score .number, .scoreboard .number').html(score);
 
 	$('body').one('click', function() {
-		$('.hud .get-ready').hide();
+		$('.hud .get-ready, .click-to-start').hide();
+		$('.hud .score').show();
 		start_pipe();
-		pipe_assembly = window.setInterval(function() { start_pipe(); }, 1500)
+		pipe_assembly = window.setInterval(function() { start_pipe(); }, game_speed)
 
 		pipe_vs_bird = window.setInterval(function() { is_pipe_still_next(); if ( collision_test( $('.bird'), $('.pipe-wrap.next') ) == true && is_bird_touching() == true ) { game_over(); }}, 100);
 	});
@@ -153,15 +173,36 @@ $(document).ready(function() {
 		$('.bird').animate({
 			y: '-='+bounce_height+'px'
 		}, bounce_duration, 'easeOutQuad', function() {
-			var distance_from_ground = get_bounce_height( bird_position.top )
+			var distance_from_ground = get_bounce_height( bird_position.top );
 			$('.bird').animate({
-				y: distance_from_ground+'px'
-			}, get_bounce_duration( distance_from_ground ), 'easeInQuad');
+				y: distance_from_ground+'px',
+			}, get_bounce_duration( distance_from_ground ), 'easeInQuad', function() { game_over(); });
 		});
 		
 	
 
 
+	});
+}
+
+$(document).ready(function() {
+
+	$(function() {
+            FastClick.attach(document.body);
+    });
+
+	bird_height = $('.bird').outerHeight();
+	world_height = $('.world').outerHeight();
+	world_width = $('.world').outerWidth();	
+	bird_start_position = $('.bird').position();
+
+	pipe_speed = (5000 * world_width) / 1000
+
+
+	start_game();
+
+	$('.restart').on('click', function() {
+		start_game();
 	});
 
 });

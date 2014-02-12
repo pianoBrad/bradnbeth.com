@@ -33,12 +33,59 @@
 	font-size: 2em;
 }
 
-.hud h2 { font-size: 40px; color: #fab907; text-shadow: 1px 1px 10px #554351; }
-.hud h1 { font-size: 60px; color: #fab907; text-shadow: 1px 1px 10px #554351; }
+.hud {
+	-webkit-user-select: none; /* Chrome/Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+ */
 
-.hud .game-over {
-	visibility: hidden;
+	/* Rules below not implemented in browsers yet */
+	-o-user-select: none;
+	user-select: none;
+}
+
+.hud h3 { font-size: 30px; }
+.hud h2 { font-size: 40px; color: #fab907; text-shadow: 3px 4px 0px #554351; }
+.hud h1 { font-size: 60px; color: #fab907; text-shadow: 3px 4px 0px #554351; }
+
+.hud .score .number {
+	color: #FFFFFF;
+	text-shadow: 3px 4px 0px rgba(0,0,0,0.5);
+}
+
+.hud .game-over,
+.hud .score {
 	display: none;
+}
+
+.hud .scoreboard {
+	width:320px;
+	margin:0px auto 20px;
+	background-color:#FAB907;
+	box-shadow: 3px 4px 0px #554351;;
+}
+
+.hud .scoreboard .number {
+	color: #FFFFFF;
+}
+
+.hud .game-over .restart {
+	width: 320px;
+	margin: 0px auto;
+	background-color: #dd6300;
+	padding: 5px;
+	box-shadow: 3px 4px 0px #554351;
+}
+
+.hud .game-over .restart > * {
+	margin: 0px;
+	padding: 4px;
+	color: white;
+	text-shadow: none;
+	border: 3px solid #eeddbf;
+}
+
+.hud .game-over .restart:hover {
+	cursor: pointer;
 }
 
 html {
@@ -72,7 +119,7 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 	border-radius: 50%;
 	background-color: transparent;
 	position: absolute;
-	bottom: 25%;
+	bottom: 33%;
 	left: 25%;
 	z-index: 1000;
 	background-image: url('../images/bird-start.png');
@@ -108,6 +155,7 @@ body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 	background-image: url("../images/pipe.png");
     background-size: 100% auto;
 }
+
 
 /********************************************************
 		MEDIA QUERIES
