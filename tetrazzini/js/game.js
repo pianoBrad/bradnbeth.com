@@ -397,6 +397,7 @@ function reset() {
     var gravity = 1.2;
 	var velocity = 1.2;
 	var drop_rate = 0.1;
+	c = 0;
 
 	chicken.is_flapping = false; 
 	chicken.sprite = new Sprite(chicken_url, [0, 0], [chicken_width, chicken_height], 10, [0]);
