@@ -71,6 +71,20 @@ var squawk_url = "sounds/squawk.mp3";
 
 var bok = new Audio(bok_url);
 var squawk = new Audio(squawk_url);
+window.addEventListener('touchstart', function() {
+
+    // create empty buffer
+    var buffer = myContext.createBuffer(1, 1, 22050);
+    var source = myContext.createBufferSource();
+    source.buffer = buffer;
+
+    // connect to output (your speakers)
+    source.connect(myContext.destination);
+
+    // play the file
+    source.noteOn(0);
+
+}, false);
 
 // Game states
 var chicken_width = 54;
