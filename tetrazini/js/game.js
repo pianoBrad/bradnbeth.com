@@ -291,8 +291,8 @@ function handle_input(dt) {
             chicken.is_jumping = true; 
         }
         // Bok!
-        var bawk = new Audio(bok_url);
-        bawk.play();
+        //var bawk = new Audio(bok_url);
+        //bawk.play();
     } else if ( !input.isDown('*') &&
        !is_game_over) {
     	//console.log('nothing pressed..');
@@ -530,7 +530,7 @@ function game_over() {
     chicken.is_falling = false;
     chicken.sprite = new Sprite(chicken_dead_url, [0, 0], [chicken_dead_width, chicken_dead_height], 10, [0,0,0,0,0,0,0,0,0,0], 'horizontal', [chicken_scale_x,chicken_scale_y], true);
     // Squawk!
-    squawk.play();
+    //squawk.play();
 }
 
 
