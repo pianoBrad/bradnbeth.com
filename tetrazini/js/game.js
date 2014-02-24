@@ -71,20 +71,6 @@ var squawk_url = "sounds/squawk.mp3";
 
 var bok = new Audio(bok_url);
 var squawk = new Audio(squawk_url);
-window.addEventListener('touchstart', function() {
-
-    // create empty buffer
-    var buffer = myContext.createBuffer(1, 1, 22050);
-    var source = myContext.createBufferSource();
-    source.buffer = buffer;
-
-    // connect to output (your speakers)
-    source.connect(myContext.destination);
-
-    // play the file
-    source.noteOn(0);
-
-}, false);
 
 // Game states
 var chicken_width = 54;
@@ -291,8 +277,8 @@ function handle_input(dt) {
             chicken.is_jumping = true; 
         }
         // Bok!
-        //var bawk = new Audio(bok_url);
-        //bawk.play();
+        var bawk = new Audio(bok_url);
+        bawk.play();
     } else if ( !input.isDown('*') &&
        !is_game_over) {
     	//console.log('nothing pressed..');
@@ -530,7 +516,7 @@ function game_over() {
     chicken.is_falling = false;
     chicken.sprite = new Sprite(chicken_dead_url, [0, 0], [chicken_dead_width, chicken_dead_height], 10, [0,0,0,0,0,0,0,0,0,0], 'horizontal', [chicken_scale_x,chicken_scale_y], true);
     // Squawk!
-    //squawk.play();
+    squawk.play();
 }
 
 
