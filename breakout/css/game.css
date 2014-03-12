@@ -1,0 +1,9 @@
+/**********************************************
+			Default Game Styles
+**********************************************/
+
+#game canvas {
+	margin: 0px auto;
+	position: relative;
+	display: block;
+}
