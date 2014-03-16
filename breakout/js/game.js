@@ -34,20 +34,31 @@ var display_size = {
 // Create the canvas
 var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
-canvas.width =  640; //display_size.width //320;//512;
-canvas.height = 480; //display_size.height //568;//480;
-var proportion_y = 480; //320;
-var proportion_x = 640; //568;
-var paddle_width = 100;
-var paddle_height = 25;
+canvas.width =  window.innerWidth; //640; //display_size.width //320;//512;
+canvas.height = window.innerHeight; //480; //display_size.height //568;//480;
+var proportion_x = 60; //320;
+var proportion_y = 90; //568;
+var padding_proportion_top = 8;
+var padding_proportion_bottom = 8;
+var paddle_proportion_x = 10;
+var paddle_proportion_y = 3;
+//var paddle_width = 100;
+//var paddle_height = 25;
 var paddle_speed = 300;
-var ball_height = 25;
-var ball_width = 25;
+
+var ball_proportion_width = 3;
+var ball_proportion_height = 3;
 var ball_x_speed = 150;
 var ball_y_speed = 150;
+
+var block_proportion_width = 4;
+var block_proportion_height = 3;
+
+var bassel_proportion_width = 22;
+var bassel_proportion_height = 31;
+
+var dropshadow_proportion = 1;
 // Set styles of hud elements, based on canvas size
-// document.getElementById('score').style.width=canvas.width+"px";
-// document.getElementById('score').style.margin=(canvas.height/20)+"px 0px";
 document.getElementById('game').appendChild(canvas);
 
 
@@ -72,56 +83,53 @@ function main() {
 
 // Set up the blocks
 
-var block_width = 75;
-var block_height = 25;
-var blocks = [];
-var total_blocks = 38;
-var blocks_total_columns = 7;
-var blocks_total_rows = 8;
-var block_starting_x = ( canvas.width - (blocks_total_columns * block_width) ) / 2;
+var add_block = function(blocks_array, block_type, block_pos) {
+    blocks_array.push({
+        pos: [block_pos[0], block_pos[1]],
+        x2: block_pos[0] + block.width,
+        y2: block_pos[1] + block.height,
+        width: block.width,
+        height: block.height,
+        type: block_type,
+        color: block_type.color,
+        is_cleared: false
+    });
+}
 
 var arrange_blocks = function() {
     var current_column = 1;
     var current_row = 1;
     var block_pos = [block_starting_x,0];
 
-    for ( b = 0; b < total_blocks; b++ ) {
-        var block_color = 'red';
-        var current_block_url;
-        switch (block_color) {
-            case 'red':
-                current_block_url = block_url.red;
-                break;
+    var create_bar = function(starting_pos) {
+        var current_pos = starting_pos;
+        for ( b = 0; b < blocks_total_rows; b++ ) {
+            add_block(blocks, block.types.standard, current_pos );
+            current_pos[1]+=block.height;
         }
-
-        blocks.push({
-            pos: [block_pos[0], block_pos[1]],
-            x2: block_pos[0] + block_width,
-            y2: block_pos[1] + block_height,
-            width: block_width,
-            height: block_height,
-            color: block_color,
-            is_cleared: false,
-            sprite: new Sprite(current_block_url, [0, 0], [block_width, block_height], 10, [0])
-        });
-
-
-        if (current_row >= blocks_total_rows & current_column <= blocks_total_columns) {
-            current_row = 1;
-            block_pos[0] = blocks[b].pos[0] + block_width;
-            block_pos[1] = blocks[0].pos[1];
-            current_column++;
-        } else {
-            if ( isEven(current_column) && current_row == 1 ) {
-                current_row = blocks_total_rows; 
-                block_pos[1] = blocks[blocks_total_rows - 1].pos[1]
-            } else {
-                current_row++;
-                block_pos[1] += block_height;
-            }
-        }
-
     }
+
+    var create_horizontal_bar = function(starting_pos) {
+        var current_pos = starting_pos;
+        for ( b = 0; b < blocks_total_columns; b++) {
+            add_block(blocks, block.types.standard, current_pos);
+            current_pos[0]+=block.width;
+        }
+    }
+
+    // Create the Top Frame
+    create_horizontal_bar( [block_starting_x, blocks_initial_starting_y] );
+
+
+    // Create the Vertical Bars
+    var current_column_x = block_starting_x + ( (block.width / 3) ) ;
+    for ( c = 0; c < 5; c++ ) {
+        create_bar([current_column_x, ( blocks_initial_starting_y +  block.height ) ] );
+        current_column_x += Math.round( ((block.width * 2) + (block.width / 3)) );
+    }
+
+    //Create the Bottom Frame
+    create_horizontal_bar( [block_starting_x, blocks_initial_starting_y + ( ( blocks_total_rows * block.height ) + block.height )] );
 
 }
 
@@ -136,7 +144,8 @@ function init() {
 
     reset();
     lastTime = Date.now();
-    arrange_blocks();
+    //arrange_blocks();
+    ball.is_moving = false;
     main();
 }
 
@@ -150,12 +159,25 @@ if ( document.getElementById('breakout').hasClass('svg') == true ) {
 
 if ( use_svg == false ) {
     var file_extension = 'png';
+
+    ball_source_width = 256;
+    ball_source_height = 256;
+
+    bassel_source_width = 1280;
+    bassel_source_height = 1804;
 } else {
     var file_extension = 'svg';
+
+    ball_source_width = 6;
+    ball_source_height = 6;
+
+    bassel_source_width = 1000;
+    bassel_source_height = 1409;
 }
 
 
 // Get the resources for the game
+var bassel_url = 'images/bassel.'+file_extension;
 var paddle_url = 'images/paddle.'+file_extension;
 var ball_url = 'images/ball.'+file_extension;
 var block_url = { 
@@ -163,6 +185,7 @@ var block_url = {
 }
 
 resources.load([
+    bassel_url,
     paddle_url,
     ball_url,
     block_url.red
@@ -187,69 +210,188 @@ var isMobile = {
     }
 };
 
-// Function for getting coordinates of mouse click or touch
-function relMouseCoords(event){
-    var totalOffsetX = 0;
-    var totalOffsetY = 0;
-    var canvasX = 0;
-    var canvasY = 0;
-    var currentElement = this;
-
-    do{
-        totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
-        totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-    }
-    while(currentElement = currentElement.offsetParent)
-
-    canvasX = event.pageX - totalOffsetX;
-    canvasY = event.pageY - totalOffsetY;
-
-    return {x:canvasX, y:canvasY}
-}
-HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
-
-
 
 // Game states
+
+game_board = {
+    width: 400,
+    height: 600,
+    pos: [( canvas.width / 2 ) - ( 400 / 2 ), 0],
+    padding_top: Math.round( ( 600 * padding_proportion_top ) / proportion_y ),
+    padding_bottom: Math.round( ( 600 * padding_proportion_bottom ) / proportion_y ),
+    padding_left: ( canvas.width / 2 ) - ( 400 / 2 ),
+    dropshadow: {
+        color: 'rgba(0,0,0,0.35)',
+        offset: ( ( 400 * dropshadow_proportion ) / proportion_x )
+    }
+}
+
+var game = {
+    is_reset: false,
+    is_over: false,
+    is_running: false,
+    round_cleared: false,
+    display_title: true,
+    blocks_animating: false,
+    blocks_in_play: false,
+    time: 0,
+    starting_score: 0,
+    score: 0,
+    starting_round: 1,
+    round: 1,
+    background: {
+        pos: [game_board.pos[0], 0],
+        width: game_board.width,
+        height: game_board.height,
+        color: 'rgb(55,55,55)'
+    }
+}
+
+/**
+ctx.font = font_height+'px fjallaone-regular-webfont';
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText("You're Fried!", canvas.width/2, youre_fried.pos[1] + (youre_fried_fitted_height / 2.2) );
+**/
+
+var hud_top = {
+    height: game_board.padding_top,
+    width: game_board.width,
+    pos: [game_board.pos[0], game_board.pos[1]],
+    round: {
+        text_props: {
+            font: (game_board.padding_top / 3)+'px press_start_2pregular',
+            textBaseline: 'middle',
+            textAlign: 'center',
+            fillStyle: '#FFFFFF'
+        },
+        strings: {
+            round: 'Round: '
+        }
+    },
+    try_again: {
+        text_props: {
+            font: (game_board.padding_top / 3.5)+'px press_start_2pregular',
+            textBaseline: 'middle',
+            textAlign: 'center',
+            fillStyle: '#FFFFFF'
+        },
+        strings: {
+            try_again: 'Try again? Press any key.'
+        }
+    },
+    next_round: {
+        text_props: {
+            font: (game_board.padding_top / 3.75)+'px press_start_2pregular',
+            textBaseline: 'middle',
+            textAlign: 'center',
+            fillStyle: '#FFFFFF'
+        },
+        strings: {
+            try_again: 'Next round? Press any key.'
+        } 
+    }
+}
+
+var hud = {
+    height: game_board.padding_bottom,
+    width: game_board.width,
+    pos: [game_board.pos[0], ( game_board.height - game_board.height/10 ), game_board.width + game_board.padding_left, game_board.height ],
+    score: { 
+        text_props: {
+            font: (game_board.padding_bottom / 3)+'px',
+            textBaseline: 'middle',
+            textAlign: 'left',
+            fillStyle: '#FFFFFF'
+        },
+        strings: {
+            score: 'Score: '
+        }
+    },
+    round: {
+        text_props: {
+            font: (game_board.padding_bottom / 3)+'px',
+            textBaseline: 'middle',
+            textAlign: 'right',
+            fillStyle: '#FFFFFF'
+        },
+        strings: {
+            round: 'Round: '
+        }
+    }
+}
+
 var paddle = {
-    pos: [( ( canvas.width / 2 ) - ( paddle_width / 2 ) ), ( ( canvas.height - paddle_height) - canvas.height/10 )],
-    x2: ( (canvas.width / 2) + ( paddle_width / 2 ) ),
-    y2: ( canvas.height - ( canvas.height/10 ) ),
-    height: paddle_height,
-    width: paddle_width,
+    starting_pos: [(game_board.width / 2) - ( ( ( game_board.width * paddle_proportion_x ) / proportion_x ) /2 ) + (game_board.pos[0]), ( ( game_board.height - ( ( game_board.height * paddle_proportion_y ) / proportion_y )) - hud.height )],
+    pos: [( ( game_board.width / 2 ) - ( ( ( game_board.width * paddle_proportion_x ) / proportion_x ) / 2 ) ) + (game_board.pos[0]), ( ( game_board.height - ( ( game_board.height * paddle_proportion_y ) / proportion_y )) - hud.height )],
+    x2: ( (game_board.width / 2) + ( ( ( game_board.width * paddle_proportion_x ) / proportion_x ) / 2 ) ),
+    y2: ( game_board.height - ( game_board.height/10 ) ),
+    height: ( ( game_board.height * paddle_proportion_y ) / proportion_y ) ,
+    width: ( ( game_board.width * paddle_proportion_x ) / proportion_x ) ,
+    color: 'rgb( 254, 238, 106)',
     speed: paddle_speed,
     is_moving: false,
-    horizontal_dir: 'left',
-    sprite: new Sprite(paddle_url, [0, 0], [paddle_width, paddle_height], 10, [0])
+    horizontal_dir: 'left'
+    //sprite: new Sprite(paddle_url, [0, 0], [paddle_width, paddle_height], 10, [0])
 }
 
 var ball = {
-    pos: [ (canvas.width / 2), (canvas.height / 2)],
-    x2: ( (canvas.width / 2) + ball_width ),
-    y2: ( (canvas.height / 2) + ball_height ),
-    height: ball_height,
-    width: ball_width,
+    starting_pos: [ (game_board.width / 2) - ( ( ( game_board.width * ball_proportion_width ) / proportion_x ) /2 ) + (game_board.pos[0]), (paddle.pos[1]-( ( game_board.height * ball_proportion_height ) / proportion_y ))],
+    pos: [ (game_board.width / 2) - ( ( ( game_board.width * ball_proportion_width ) / proportion_x ) /2 ) + (game_board.pos[0]), (paddle.pos[1]-( ( game_board.height * ball_proportion_height ) / proportion_y ))],
+    x2: ( (canvas.width / 2) + ( ( game_board.width * ball_proportion_width ) / proportion_x ) ),
+    y2: ( (canvas.height / 2) + ( ( game_board.height * ball_proportion_height ) / proportion_y ) ),
+    height: Math.round( ( game_board.height * ball_proportion_height ) / proportion_y ),
+    width: Math.round( ( game_board.width * ball_proportion_width ) / proportion_x ),
     is_moving: true,
-    is_moving_down: true,
+    is_moving_down: false,
     is_moving_right: true,
     is_colliding: false,
+    animating_speed: 100,
     center: [ 0,0 ],
-    sprite: new Sprite(ball_url, [0, 0], [ball_width, ball_height], 10, [0])
+    sprite: new Sprite(ball_url, [0, 0], [ball_source_width, ball_source_height], 10, [0], 'horizontal', [ ( ( ( game_board.width * ball_proportion_width ) / proportion_x ) / ball_source_width ) , ( ( ( game_board.height * ball_proportion_height ) / proportion_y ) / ball_source_height )])
+}
+
+var block = {
+    proportion_width: 4,
+    proportion_height: 3,
+    width: Math.round( ( game_board.width * block_proportion_width / proportion_x) ),
+    height: Math.round( ( ( game_board.height * block_proportion_height ) / proportion_y ) ),
+    types: {
+        standard: {
+            color: 'rgb(190,190,190)'
+        }
+    }
 }
 
 
-// The score
-var score = 0;
-var game_time = 0;
-//var score_el = document.getElementById('score');
+//var block_width = 75;
+//var block_height = 25;
+var blocks = [];
+var total_blocks = 38;
+var blocks_total_columns = 11;
+var blocks_total_rows = 12;
+var blocks_initial_starting_y = 0 - ( game_board.padding_top + ( blocks_total_rows * block.height ) ); 
+var block_starting_x = Math.round( (( game_board.width - (blocks_total_columns * block.width) ) / 2) + game_board.pos[0] );
 
+var bassel = {
+    starting_pos: [ 
+        ( game_board.width / 2 ) - ( (( game_board.width * bassel_proportion_width ) / proportion_x) / 2 ) + game_board.pos[0] , 
+        ( (game_board.padding_top)+ ( (((blocks_total_rows + 2) * block.height)/2) - ( (( game_board.height * bassel_proportion_height ) / proportion_y) / 2 ) ) ) ],
+    pos: [
+        ( game_board.width / 2 ) - ( (( game_board.width * bassel_proportion_width ) / proportion_x) / 2 ) + game_board.pos[0] ,
+        ( (game_board.padding_top)+ ( (((blocks_total_rows + 2) * block.height)/2) - ( (( game_board.height * bassel_proportion_height ) / proportion_y) / 2 ) ) ) ],
+    width: ( game_board.width * bassel_proportion_width ) / proportion_x,
+    height: ( game_board.height * bassel_proportion_height ) / proportion_y,
+    sprite: new Sprite(bassel_url, [0, 0], [bassel_source_width, bassel_source_height], 10, [0], 'horizontal', [ ( (( game_board.width * bassel_proportion_width ) / proportion_x) / bassel_source_width ) , ( (( game_board.height * bassel_proportion_height ) / proportion_y) / bassel_source_height ) ])
+}
 
 
 // Update the game objects
 var c = 0;
 function update(dt) {
     if ( isNaN( dt ) ) { dt = 0; }
-    game_time += dt;
+    game.time += dt;
 
     handle_input(dt);
     update_entities(dt);
@@ -262,19 +404,48 @@ function update(dt) {
 
 // Handle the player input
 //var currently_pressed = false;
+var mouse_currently_pressed = false;
+var current_mouse_pressed_coords = {};
+var currently_touching = false;
 var currently_pressed = false;
 function handle_input(dt) {
-    if( input.isDown('RIGHT') ) {
+    if ( ( input.isDown('*') || input.isDown('LEFT') || (input.isDown('RIGHT')) || input.isDown('MOUSEDOWN') ) && !currently_pressed ) {
+        currently_pressed = true;
+        if ( !game.is_running && game.is_reset && !game.blocks_in_play && !game.blocks_animating ) {
+            //Start the round
+            //console.log('start round!');
+            game.blocks_animating = true;
+        } else if ( game.is_over ) {
+            reset();
+        }
+    } else {
+        currently_pressed = false;
+    }
+
+    if( input.isDown('RIGHT') && game.blocks_in_play && !game.is_over ) {
+        if ( !game.is_running && game.is_reset ) { ball.is_moving_right = true; launch_ball(); };
         //console.log('RIGHT');
+        console.log(game.blocks_in_play);
         paddle.is_moving = true;
         paddle.horizontal_dir = 'right';
-    } else if ( input.isDown('LEFT') ) {
+    } else if ( input.isDown('LEFT') && game.blocks_in_play && !game.is_over ) {
+        if ( !game.is_running && game.is_reset ) { ball.is_moving_right = false; launch_ball(); };
         //console.log('LEFT');
         paddle.is_moving = true;
         paddle.horizontal_dir = 'left';
     } else {
         paddle.is_moving = false;
     }
+
+    if ( input.isDown('MOUSEDOWN') && !mouse_currently_pressed && game.blocks_in_play ) { 
+        mouse_currently_pressed = true;
+        current_mouse_pressed_coords = input.return_coords();
+        if ( !game.is_running && game.is_reset ) { launch_ball(); };
+    } else if ( !input.isDown('MOUSEDOWN') ) {
+        mouse_currently_pressed = false;
+        current_mouse_pressed_coords = {}
+    }
+
 }
 
 
@@ -288,15 +459,15 @@ function update_entities( dt ) {
         paddle.x2 = paddle.pos[0] + paddle.width;
     }
 
-    if ( paddle.pos[0] <= 0 ) {
-        paddle.pos[0] = 0;
-    } else if ( ( paddle.pos[0] + paddle.width ) >= canvas.width ) {
-        paddle.pos[0] = ( canvas.width - paddle.width );
+    if ( paddle.pos[0] <= game_board.pos[0] ) {
+        paddle.pos[0] = game_board.pos[0];
+    } else if ( ( paddle.pos[0] + paddle.width ) >= ( game_board.pos[0] + game_board.width ) ) {
+        paddle.pos[0] = ( game_board.pos[0] + game_board.width ) - paddle.width;
     }
 
 
     // Ball Movement
-    if ( ball.is_moving ) {
+    if ( ball.is_moving && game.is_running ) {
         switch(ball.is_moving_right) {
             case false:
                 ball.pos[0] -= ( ball_x_speed * dt );
@@ -319,6 +490,22 @@ function update_entities( dt ) {
 
         ball.center[0] = (ball.pos[0] + ball.x2)/2;
         ball.center[1] = (ball.pos[1] + ball.y2)/2;
+
+        if ( ball.pos[1] >= game_board.height ) {
+            game.is_over = true;
+        } 
+    }
+
+    // Handle block movement
+    if ( game.blocks_animating && blocks[0].pos[1] <= game_board.padding_top ) {
+        console.log('animating..');
+        game.display_title = false;
+        for( b=0; b < blocks.length; b++) {
+            blocks[b].pos[1] += 10;
+        }
+    }  else if ( game.blocks_animating ) {
+        game.blocks_animating = false;
+        game.blocks_in_play = true;
     }
 
 }
@@ -340,17 +527,23 @@ function box_collides(pos, size, pos2, size2) {
 }
 
 function check_collisions() {
-    if ( ball.y2 >= canvas.height ) {
-        ball.is_moving_down = false;
-    } else if ( ball.x2 >= canvas.width ) {
+    if ( ball.y2 >= game_board.height ) {
+        //ball.is_moving_down = false;
+    } else if ( ball.x2 >= ( game_board.width + game_board.pos[0] )  ) {
         ball.is_moving_right = false;
-    } else if ( ball.pos[0] <= 0 ) {
+    } else if ( ball.pos[0] <= game_board.pos[0] ) {
         ball.is_moving_right = true;
     } else if ( ball.pos[1] <= 0 ) {
         ball.is_moving_down = true;
     }
+
+    if ( game.is_running && blocks.length <= 0 ) {
+        game.is_running = false;
+        game.round_cleared = true;
+        reset();
+    }
     
-    if ( box_collides( ball.pos, ball.sprite.size, paddle.pos, paddle.sprite.size ) ) {
+    if ( box_collides( ball.pos, [ball.width, ball.height], paddle.pos, [paddle.width, paddle.height] ) ) {
         //if ( !ball.is_colliding && ball.pos[1] >= ( paddle.pos[1] ) ) {
         if ( !ball.is_colliding &&
              (
@@ -372,7 +565,7 @@ function check_collisions() {
     }
 
     for ( b = 0; b < blocks.length; b++ ) {
-        if ( box_collides( ball.pos, ball.sprite.size, blocks[b].pos, blocks[b].sprite.size ) && !blocks[b].is_cleared ) {
+        if ( box_collides( ball.pos, [ball.width, ball.height], blocks[b].pos, [blocks[b].width, blocks[b].height ] ) && !blocks[b].is_cleared ) {
             //console.log('hitting a block!');
             if ( !ball.is_colliding &&
                  (
@@ -383,6 +576,7 @@ function check_collisions() {
                 ball.is_colliding = true;
                 ball.is_moving_right = !ball.is_moving_right;
                 blocks[b].is_cleared = true;
+                game.score++;
                 blocks.splice(b, 1);
             } else if ( 
                 !ball.is_colliding 
@@ -390,6 +584,7 @@ function check_collisions() {
                 ball.is_colliding = true;
                 ball.is_moving_down = !ball.is_moving_down;
                 blocks[b].is_cleared = true;
+                game.score++;
                 blocks.splice(b, 1);
                 //console.log('top or bottom collision');
             }
@@ -404,20 +599,115 @@ function check_collisions() {
 
 // Draw everything
 function render() {
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#CCCCCC";
+        ctx.fillRect(0,0,canvas.width, canvas.height);
 
-        render_entity( paddle );
+        draw_rect( game.background, ctx );
 
-        render_entity( ball );
+        
+            
+        render_entity( bassel );
+
+        //Draw Shadows
+
+        draw_shadow( ball, ctx );
+
+        draw_shadow( paddle, ctx );
 
         for( b = 0; b < blocks.length; b++ ) {
             if ( !blocks[b].is_cleared ) {
-                render_entity(blocks[b]);
+                //render_entity(blocks[b]);
+
+                draw_shadow(blocks[b], ctx);
             }
         }
 
+
+        //Draw Game Entities
+        draw_rect( paddle, ctx );
+
+        render_entity( ball );
+        //Draw blocks
+        for( b = 0; b < blocks.length; b++ ) {
+            if ( !blocks[b].is_cleared ) {
+                //render_entity(blocks[b]);
+
+                draw_rect(blocks[b], ctx);
+            }
+        }
+
+        if ( game.is_over ) {
+            game_over();
+        } else if ( game.is_running ) {
+            //Render the score/hud display
+            ctx.font = (hud.height/3)+'px press_start_2pregular';
+            ctx.textBaseline = hud.score.text_props.textBaseline;
+            ctx.textAlign = hud.score.text_props.textAlign;
+            ctx.fillStyle = hud.score.text_props.fillStyle;
+            ctx.fillText(hud.score.strings.score+game.score, hud.pos[0],( hud.pos[1] + ( (hud.height) - paddle.height ) ) );
+
+            //Render the round
+            ctx.textAlign = hud.round.text_props.textAlign;
+            ctx.fillText(hud.round.strings.round+game.round, hud.pos[2],( hud.pos[1] + ( hud.height - paddle.height )  ) );
+
+        } 
+
+        if ( game.display_title ) {
+            //Show Logo
+            ctx.font = '20px press_start_2pregular';
+            ctx.textBaseline = 'middle';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText('Bassel BreaKout!',( game_board.pos[0] + (game_board.width/2) ), (game_board.height / 2) );
+
+            //Press any key to play!
+            if (!isMobile.any()) {
+                ctx.font = ( game_board.padding_top/3 ) + 'px press_start_2pregular';
+                ctx.textBaseline = 'top';
+                ctx.fillText('Press any key to play', ( game_board.pos[0] + (game_board.width/2)) , (game_board.padding_top / 2) );
+            }
+        }
+
+        if ( !game.is_running && game.blocks_in_play && !game.is_over ) {
+            //Display the Round in the top hud
+            ctx.font = hud_top.round.text_props.font;
+            ctx.textBaseline = hud_top.round.text_props.textBaseline;
+            ctx.textAlign = hud_top.round.text_props.textAlign;
+            ctx.fillStyle = hud_top.round.text_props.fillStyle;
+            ctx.fillText(hud_top.round.strings.round+game.round, (game_board.pos[0] + (game_board.width/2)) , (hud_top.height / 2) );
+        } else if ( !game.is_running && !game.blocks_animating && !game.is_over && game.round_cleared ) {
+            ctx.font = hud_top.next_round.text_props.font;
+            ctx.textBaseline = hud_top.next_round.text_props.textBaseline;
+            ctx.textAlign = hud_top.next_round.text_props.textAlign;
+            ctx.fillStyle = hud_top.next_round.text_props.fillStyle;
+            ctx.fillText(hud_top.next_round.strings.try_again, (game_board.pos[0] + (game_board.width/2) ), (hud_top.height / 2) );
+        } else if ( game.is_over ) {
+            //Display try again message in top_hud
+            ctx.font = hud_top.try_again.text_props.font;
+            ctx.textBaseline = hud_top.try_again.text_props.textBaseline;
+            ctx.textAlign = hud_top.try_again.text_props.textAlign;
+            ctx.fillStyle = hud_top.try_again.text_props.fillStyle;
+            ctx.fillText(hud_top.try_again.strings.try_again, (game_board.pos[0] + (game_board.width/2) ), (hud_top.height / 2) );
+        }
+
+        // Red rectangle
+        
+        ctx.beginPath();
+        ctx.lineWidth=ball.width + game_board.dropshadow.offset;
+        ctx.strokeStyle="#666666";
+        ctx.strokeRect(game_board.pos[0] - (ctx.lineWidth/2), game_board.pos[1] - (ctx.lineWidth/2), game_board.width + (ctx.lineWidth),game_board.height + (ctx.lineWidth));
+        
 };
+
+function draw_shadow( element, context ) {
+    context.fillStyle = game_board.dropshadow.color;
+    context.fillRect( ( element.pos[0] - game_board.dropshadow.offset ), ( element.pos[1] + game_board.dropshadow.offset ), element.width, element.height )
+}
+
+function draw_rect( element, context ) {
+    context.fillStyle = element.color;
+    context.fillRect(element.pos[0], element.pos[1], element.width, element.height);
+}
 
 function render_entities( list ) {
     for(var i=0; i<list.length; i++) {
@@ -437,10 +727,43 @@ function render_entity( entity ) {
 
 // Game over
 function game_over() {
+    //console.log('game currently over..');
+    ball.is_moving = false;
+    game.is_running = false;
+    game.is_over = true;
+    game.round_cleared = false;
 }
 
 
 
 // Reset game to original state
 function reset() {
+    game.is_over = false;
+    game.is_reset = true;
+    game.blocks_in_play = false;
+
+    ball.is_moving = false;
+    ball.pos[0] = ball.starting_pos[0];
+    ball.pos[1] = ball.starting_pos[1];
+
+    paddle.pos[0] = paddle.starting_pos[0];
+    paddle.pos[1] = paddle.starting_pos[1];
+
+    blocks = [];
+    arrange_blocks();
+
+    if ( !game.round_cleared ) {
+        game.display_title = true;
+        game.score = game.starting_score;
+        game.round = game.starting_round;
+    } else {
+        console.log('next round!');
+        game.round++;
+    }
 };
+
+
+function launch_ball() {
+    game.is_running = true; 
+    ball.is_moving = true; 
+}
