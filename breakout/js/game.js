@@ -211,6 +211,7 @@ var isMobile = {
 };
 
 
+
 // Game states
 
 game_board = {
@@ -225,6 +226,25 @@ game_board = {
         offset: ( ( 400 * dropshadow_proportion ) / proportion_x )
     }
 }
+
+var block = {
+    proportion_width: 4,
+    proportion_height: 3,
+    width: Math.round( ( game_board.width * block_proportion_width / proportion_x) ),
+    height: Math.round( ( ( game_board.height * block_proportion_height ) / proportion_y ) ),
+    types: {
+        standard: {
+            color: 'rgb(190,190,190)'
+        }
+    }
+}
+
+var blocks = [];
+var total_blocks = 38;
+var blocks_total_columns = 11;
+var blocks_total_rows = 12;
+var blocks_initial_starting_y = 0 - ( game_board.padding_top + ( blocks_total_rows * block.height ) ); 
+var block_starting_x = Math.round( (( game_board.width - (blocks_total_columns * block.width) ) / 2) + game_board.pos[0] );
 
 var game = {
     is_reset: false,
@@ -294,6 +314,28 @@ var hud_top = {
     }
 }
 
+var hud_mid = {
+    height: game_board.height - ( (-blocks_initial_starting_y) + game_board.padding_bottom ) ,
+    width: game_board.width,
+    pos: [game_board.pos[0], (-blocks_initial_starting_y) + game_board.padding_top ],
+    title: {
+        text_props: {
+            line_height: 10,
+            font: ( (game_board.height - ( (-blocks_initial_starting_y) + game_board.padding_bottom ) ) / 10)+'px press_start_2pregular',
+            textBaseline: 'middle',
+            textAlign: 'left',
+            fillStyle: '#FFFFFF'
+        },
+        strings: {
+            bassel: "Bassel",
+            breakout: "BreaKout!"
+        }
+    }
+
+}
+
+//console.log(hud_mid.pos);
+
 var hud = {
     height: game_board.padding_bottom,
     width: game_board.width,
@@ -352,27 +394,6 @@ var ball = {
     sprite: new Sprite(ball_url, [0, 0], [ball_source_width, ball_source_height], 10, [0], 'horizontal', [ ( ( ( game_board.width * ball_proportion_width ) / proportion_x ) / ball_source_width ) , ( ( ( game_board.height * ball_proportion_height ) / proportion_y ) / ball_source_height )])
 }
 
-var block = {
-    proportion_width: 4,
-    proportion_height: 3,
-    width: Math.round( ( game_board.width * block_proportion_width / proportion_x) ),
-    height: Math.round( ( ( game_board.height * block_proportion_height ) / proportion_y ) ),
-    types: {
-        standard: {
-            color: 'rgb(190,190,190)'
-        }
-    }
-}
-
-
-//var block_width = 75;
-//var block_height = 25;
-var blocks = [];
-var total_blocks = 38;
-var blocks_total_columns = 11;
-var blocks_total_rows = 12;
-var blocks_initial_starting_y = 0 - ( game_board.padding_top + ( blocks_total_rows * block.height ) ); 
-var block_starting_x = Math.round( (( game_board.width - (blocks_total_columns * block.width) ) / 2) + game_board.pos[0] );
 
 var bassel = {
     starting_pos: [ 
@@ -654,15 +675,34 @@ function render() {
 
         if ( game.display_title ) {
             //Show Logo
+            
+            /**
             ctx.font = '20px press_start_2pregular';
             ctx.textBaseline = 'middle';
             ctx.textAlign = 'center';
             ctx.fillStyle = '#FFFFFF';
             ctx.fillText('Bassel BreaKout!',( game_board.pos[0] + (game_board.width/2) ), (game_board.height / 2) );
+            **/
+
+            ctx.font = hud_mid.title.text_props.font;
+            ctx.textBaseline = hud_mid.title.text_props.textBaseline;
+            ctx.textAlign = hud_mid.title.text_props.textAlign;
+            ctx.fillStyle = hud_mid.title.text_props.fillStyle;
+            ctx.textAlign = 'right';
+            ctx.fillText( hud_mid.title.strings.bassel, (hud_mid.pos[0] + (game_board.width / 2.4)), (hud_mid.pos[1]) + ( hud_mid.height / 5 )  );
+            ctx.textAlign = 'left';
+            ctx.fillText( hud_mid.title.strings.breakout, (hud_mid.pos[0]) + (game_board.width / 2.4), ((( hud_mid.pos[1] + ( (game_board.height - ( (-blocks_initial_starting_y) + game_board.padding_bottom ) ) / hud_mid.title.text_props.line_height) ) + hud_mid.title.text_props.line_height) ) + ( hud_mid.height / 5 ) );
+            /**
+            ctx.font = hud_mid.title.text_props.font;
+            ctx.textBaseline = hud_mid.title.text_props.textBaseline;
+            ctx.fillStyle = hud_mid.title.text_props.fillStyle;
+            ctx.fillText(hud_mid.title.strings.bassel_breakout, hud_mid.pos[0], hud_mid.pos[2]);
+            **/
 
             //Press any key to play!
             if (!isMobile.any()) {
                 ctx.font = ( game_board.padding_top/3 ) + 'px press_start_2pregular';
+                ctx.textAlign = hud_top.round.text_props.textAlign;
                 ctx.textBaseline = 'top';
                 ctx.fillText('Press any key to play', ( game_board.pos[0] + (game_board.width/2)) , (game_board.padding_top / 2) );
             }
