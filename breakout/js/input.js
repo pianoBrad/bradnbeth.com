@@ -88,7 +88,7 @@
     }); 
     
     document.addEventListener('touchend', function(e) {
-        console.log('touchend..');
+        //console.log('touchend..');
         setKey(e, false);
     }); 
 
