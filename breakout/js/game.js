@@ -494,17 +494,29 @@ function handle_input(dt) {
 
         if ( !game.is_running && game.is_reset && !tapping.left && !currently_touching ) { ball.is_moving_right = true; game.is_reset = false; launch_ball(); }
         else if ( !game.is_running && game.is_reset && tapping.left && !currently_touching ) { ball.is_moving_right = false; game.is_reset = false; launch_ball(); };
+        
+        if( game.is_running && !game.is_reset ) {
+            //console.log('yes!');
+            if ( current_mouse_pressed_coords.x <= ( canvas.width/2 ) ) {
+                paddle.is_moving_right = false;
+            } else {
+                paddle.is_moving_right = true;
+            }
+            paddle.is_moving = true;
+        }
+
         currently_touching = true;
-    } else {
+    } else if ( !input.isDown('TOUCHING') && isMobile.any() ) {
         currently_touching = false;
     }
 
+    /**
     if ( currently_touching && isMobile.any() ) {
         paddle.is_moving = true;
     } else if ( !currently_touching && isMobile.any() ) {
-        //console.log('not touching..');
         paddle.is_moving = false;
     }
+    **/
 
 }
 
