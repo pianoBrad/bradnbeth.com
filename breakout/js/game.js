@@ -499,7 +499,7 @@ function handle_input(dt) {
 
     if ( currently_touching && !isMobile.any() ) {
         paddle.is_moving = true;
-        console.log(current_mouse_pressed_coords.x);
+        console.log('test '+current_mouse_pressed_coords.x);
     } else {
         //console.log('not touching..');
         paddle.is_moving = false;
