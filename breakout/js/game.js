@@ -430,6 +430,7 @@ var current_mouse_pressed_coords = {};
 var currently_touching = false;
 var currently_pressed = false;
 function handle_input(dt) {
+    console.log('checking..');
     if ( ( input.isDown('*') || input.isDown('LEFT') || (input.isDown('RIGHT')) || input.isDown('MOUSEDOWN') ) && !currently_pressed ) {
         currently_pressed = true;
         if ( !game.is_running && game.is_reset && !game.blocks_in_play && !game.blocks_animating ) {
