@@ -460,7 +460,7 @@ function handle_input(dt) {
     }
 
     // Handle MOUSE controls
-    if ( input.isDown('MOUSEDOWN') && !mouse_currently_pressed && game.blocks_in_play ) { 
+    if ( !is_mobile && input.isDown('MOUSEDOWN') && !mouse_currently_pressed && game.blocks_in_play ) { 
         //mouse_currently_pressed = true;
         var tapping = { left: false, right: true }
         current_mouse_pressed_coords = input.return_coords();
