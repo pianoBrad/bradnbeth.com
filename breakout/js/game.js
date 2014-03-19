@@ -503,7 +503,7 @@ function handle_input(dt) {
             }
             paddle.is_moving = true;
         }
-        console.log('test '+current_mouse_pressed_coords+' '+paddle.is_moving);
+        console.log('test '+current_mouse_pressed_coords.x+' '+current_mouse_pressed_coords.y+' '+paddle.is_moving);
 
         currently_touching = true;
     } else if ( !input.isDown('TOUCHING') && isMobile.any() ) {
