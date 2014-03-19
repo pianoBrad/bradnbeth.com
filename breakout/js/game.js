@@ -431,7 +431,7 @@ var currently_touching = false;
 var currently_pressed = false;
 function handle_input(dt) {
     //console.log('checking..');
-    if ( ( input.isDown('*') || input.isDown('LEFT') || (input.isDown('RIGHT')) || input.isDown('MOUSEDOWN') ) && !currently_pressed ) {
+    if ( ( input.isDown('*') || input.isDown('LEFT') || (input.isDown('RIGHT')) || input.isDown('MOUSEDOWN') || input.isDown('TOUCHING') ) && !currently_pressed ) {
         currently_pressed = true;
         if ( !game.is_running && game.is_reset && !game.blocks_in_play && !game.blocks_animating ) {
             //Start the round
@@ -484,10 +484,11 @@ function handle_input(dt) {
     }
 
     // Handle TOUCH controls
-    if ( input.isDown('TOUCHING') && !isMobile.any() ) {
+    if ( input.isDown('TOUCHING') && isMobile.any() && game.blocks_in_play ) {
         var tapping = { left: false, right: true }
 
         current_mouse_pressed_coords = input.return_coords();
+        console.log('test '+current_mouse_pressed_coords.x);
         if ( current_mouse_pressed_coords.x <= (canvas.width / 2) ) { console.log('touching left site. '); tapping.left = true; tapping.right = false; } else { tapping.left = false; tapping.right = true; }
 
         if ( !game.is_running && game.is_reset && !tapping.left && !currently_touching ) { ball.is_moving_right = true; game.is_reset = false; launch_ball(); }
@@ -499,7 +500,6 @@ function handle_input(dt) {
 
     if ( currently_touching && !isMobile.any() ) {
         paddle.is_moving = true;
-        console.log('test '+current_mouse_pressed_coords.x);
     } else {
         //console.log('not touching..');
         paddle.is_moving = false;
