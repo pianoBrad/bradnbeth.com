@@ -85,7 +85,7 @@
     document.addEventListener('touchstart', function(e) {
         setKey(e, true);
         coords = canvas.relMouseCoords(e);
-        console.log(e.screenX+' '_e.screenY);
+        console.log(e.screenX+' '+e.screenY);
     }); 
     
     document.addEventListener('touchend', function(e) {
