@@ -79,12 +79,10 @@
 
 
     document.addEventListener('mouseup', function(e) {
-        console.log('mouseup..');
         setKey(e, false);
     }); 
 
     document.addEventListener('touchstart', function(e) {
-        console.log('touchstart..');
         setKey(e, true);
         coords = canvas.relMouseCoords(e);
     }); 

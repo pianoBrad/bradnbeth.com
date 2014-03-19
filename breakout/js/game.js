@@ -548,7 +548,7 @@ function update_entities( dt ) {
 
     // Handle block movement
     if ( game.blocks_animating && blocks[0].pos[1] <= game_board.padding_top ) {
-        console.log('animating..');
+        //console.log('animating..');
         game.display_title = false;
         for( b=0; b < blocks.length; b++) {
             blocks[b].pos[1] += 10;
