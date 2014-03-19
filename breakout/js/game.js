@@ -374,7 +374,7 @@ var paddle = {
     color: 'rgb( 254, 238, 106)',
     speed: paddle_speed,
     is_moving: false,
-    horizontal_dir: 'left'
+    is_moving_right: false
     //sprite: new Sprite(paddle_url, [0, 0], [paddle_width, paddle_height], 10, [0])
 }
 
@@ -444,25 +444,39 @@ function handle_input(dt) {
     }
 
     if( input.isDown('RIGHT') && game.blocks_in_play && !game.is_over ) {
-        if ( !game.is_running && game.is_reset ) { ball.is_moving_right = true; launch_ball(); };
+        if ( !game.is_running && game.is_reset ) { game.is_reset = false; ball.is_moving_right = true; launch_ball(); };
         //console.log('RIGHT');
         console.log(game.blocks_in_play);
         paddle.is_moving = true;
-        paddle.horizontal_dir = 'right';
+        paddle.is_moving_right = true;
     } else if ( input.isDown('LEFT') && game.blocks_in_play && !game.is_over ) {
-        if ( !game.is_running && game.is_reset ) { ball.is_moving_right = false; launch_ball(); };
+        if ( !game.is_running && game.is_reset ) { game.is_reset = false; gameball.is_moving_right = false; launch_ball(); };
         //console.log('LEFT');
         paddle.is_moving = true;
-        paddle.horizontal_dir = 'left';
+        paddle.is_moving_right = false;
     } else {
         paddle.is_moving = false;
     }
 
-    if ( input.isDown('MOUSEDOWN') && !mouse_currently_pressed && game.blocks_in_play ) { 
-        mouse_currently_pressed = true;
+    if ( ( input.isDown('MOUSEDOWN') || input.isDown('TOUCHING') ) && !mouse_currently_pressed && game.blocks_in_play ) { 
+        //mouse_currently_pressed = true;
+        var tapping = { left: false, right: true }
         current_mouse_pressed_coords = input.return_coords();
-        if ( !game.is_running && game.is_reset ) { launch_ball(); };
-    } else if ( !input.isDown('MOUSEDOWN') ) {
+        if ( current_mouse_pressed_coords.x <= (canvas.width / 2) ) { tapping.left = true; tapping.right = false; } else { tapping.left = false; tapping.right = true; }
+        //console.log( current_mouse_pressed_coords.x+' '+canvas.width/2 );
+        if ( !game.is_running && game.is_reset && !tapping.left ) { ball.is_moving_right = true; game.is_reset = false; launch_ball(); }
+        else if ( !game.is_running && game.is_reset && tapping.left) { ball.is_moving_right = false; game.is_reset = false; launch_ball(); };
+
+        if( game.is_running && !game.is_reset ) {
+            //console.log('yes!');
+            if ( current_mouse_pressed_coords.x <= ( canvas.width/2 ) ) {
+                paddle.is_moving_right = false;
+            } else {
+                paddle.is_moving_right = true;
+            }
+            paddle.is_moving = true;
+        }
+    } else if ( !input.isDown('MOUSEDOWN') && !input.isDown('TOUCHING') ) {
         mouse_currently_pressed = false;
         current_mouse_pressed_coords = {}
     }
@@ -472,10 +486,10 @@ function handle_input(dt) {
 
 function update_entities( dt ) {
     // Paddle Movement
-    if ( paddle.is_moving && paddle.horizontal_dir == 'left' ) {
+    if ( paddle.is_moving && paddle.is_moving_right == false ) {
         paddle.pos[0] -= (paddle_speed * dt);
         paddle.x2 = paddle.pos[0] + paddle.width;
-    } else if ( paddle.is_moving && paddle.horizontal_dir == 'right' ) {
+    } else if ( paddle.is_moving && paddle.is_moving_right == true ) {
         paddle.pos[0] += (paddle_speed * dt);
         paddle.x2 = paddle.pos[0] + paddle.width;
     }
