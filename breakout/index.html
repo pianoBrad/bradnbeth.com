@@ -7,6 +7,7 @@
 	<link href="css/game.css" rel="stylesheet" type="text/css" />
 	 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/> <!--320-->
 	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="mobile-web-app-capable" content="yes">
 <body>
 
 	<div id="game"></div>
@@ -19,11 +20,7 @@
 	<script type="text/javascript" src="js/game.js"></script>
 	<script type="text/javascript">
 		window.addEventListener("load",function() {
-			// Set a timeout...
-			setTimeout(function(){
-			// Hide the address bar!
-			window.scrollTo(0, 1);
-			}, 0);
+			document.documentElement.requestFullscreen();
 		});
 	</script>
 </body>
