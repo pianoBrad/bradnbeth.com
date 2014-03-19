@@ -488,7 +488,8 @@ function handle_input(dt) {
         var tapping = { left: false, right: true }
 
         current_mouse_pressed_coords = input.return_coords();
-        if ( current_mouse_pressed_coords.x <= (canvas.width / 2) ) { console.log('touching left site. '+current_mouse_pressed_coords.x); tapping.left = true; tapping.right = false; } else { tapping.left = false; tapping.right = true; }
+        console.log(current_mouse_pressed_coords.x);
+        if ( current_mouse_pressed_coords.x <= (canvas.width / 2) ) { console.log('touching left site. '); tapping.left = true; tapping.right = false; } else { tapping.left = false; tapping.right = true; }
 
         if ( !game.is_running && game.is_reset && !tapping.left && !currently_touching ) { ball.is_moving_right = true; game.is_reset = false; launch_ball(); }
         else if ( !game.is_running && game.is_reset && tapping.left && !currently_touching ) { ball.is_moving_right = false; game.is_reset = false; launch_ball(); };
