@@ -464,6 +464,7 @@ function handle_input(dt) {
         //mouse_currently_pressed = true;
         var tapping = { left: false, right: true }
         current_mouse_pressed_coords = input.return_coords();
+        //console.log(current_mouse_pressed_coords.x);
         if ( current_mouse_pressed_coords.x <= (canvas.width / 2) ) { tapping.left = true; tapping.right = false; } else { tapping.left = false; tapping.right = true; }
         //console.log( current_mouse_pressed_coords.x+' '+canvas.width/2 );
         if ( !game.is_running && game.is_reset && !tapping.left ) { ball.is_moving_right = true; game.is_reset = false; launch_ball(); }
@@ -498,9 +499,9 @@ function handle_input(dt) {
         currently_touching = false;
     }
 
-    if ( currently_touching && !isMobile.any() ) {
+    if ( currently_touching && isMobile.any() ) {
         paddle.is_moving = true;
-    } else {
+    } else if ( !currently_touching && isMobile.any() ) {
         //console.log('not touching..');
         paddle.is_moving = false;
     }
