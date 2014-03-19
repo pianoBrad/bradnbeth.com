@@ -734,6 +734,11 @@ function render() {
                 ctx.textAlign = hud_top.round.text_props.textAlign;
                 ctx.textBaseline = 'top';
                 ctx.fillText('Press any key to play', ( game_board.pos[0] + (game_board.width/2)) , (game_board.padding_top / 2) );
+            } else {
+                ctx.font = ( game_board.padding_top/3 ) + 'px press_start_2pregular';
+                ctx.textAlign = hud_top.round.text_props.textAlign;
+                ctx.textBaseline = 'top';
+                ctx.fillText('Tap to play', ( game_board.pos[0] + (game_board.width/2)) , (game_board.padding_top / 2) ); 
             }
         }
 
