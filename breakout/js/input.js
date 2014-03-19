@@ -53,7 +53,7 @@
         } else if ( event.type == "touchstart" && status) {
             key = 'TOUCHING';
         } else if ( event.type == "touchend" && !status) {
-            key = 'TOUCHOFF';
+            key = 'TOUCHING';
         } 
 
         pressedKeys[key] = status;
