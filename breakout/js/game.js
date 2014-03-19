@@ -459,7 +459,8 @@ function handle_input(dt) {
         paddle.is_moving = false;
     }
 
-    if ( ( input.isDown('MOUSEDOWN') || input.isDown('TOUCHING') ) && !mouse_currently_pressed && game.blocks_in_play ) { 
+    // Handle MOUSE controls
+    if ( input.isDown('MOUSEDOWN') && !mouse_currently_pressed && game.blocks_in_play ) { 
         //mouse_currently_pressed = true;
         var tapping = { left: false, right: true }
         current_mouse_pressed_coords = input.return_coords();
@@ -477,9 +478,22 @@ function handle_input(dt) {
             }
             paddle.is_moving = true;
         }
-    } else if ( !input.isDown('MOUSEDOWN') && !input.isDown('TOUCHING') ) {
+    } else if ( !input.isDown('MOUSEDOWN') ) {
         mouse_currently_pressed = false;
         current_mouse_pressed_coords = {}
+    }
+
+    // Handle TOUCH controls
+    if ( input.isDown('TOUCHSTART') ) {
+        currently_touching = true;
+    } else if ( input.isDown('TOUCHOFF') ) {
+        currently_touching = false;
+    }
+
+    if ( currently_touching ) {
+        console.log('touching!');
+    } else {
+        console.log('not touching..');
     }
 
 }
