@@ -484,7 +484,7 @@ function handle_input(dt) {
     }
 
     // Handle TOUCH controls
-    if ( input.isDown('TOUCHSTART') ) {
+    if ( input.isDown('TOUCHING') ) {
         currently_touching = true;
     } else if ( input.isDown('TOUCHOFF') ) {
         currently_touching = false;
