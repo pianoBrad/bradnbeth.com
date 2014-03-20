@@ -219,26 +219,29 @@ var isMobile = {
 var x_dominance = ( (canvas.width * game_board_proportion_y) / game_board_proportion_x );
 var y_dominance = ( (canvas.height * game_board_proportion_x ) / game_board_proportion_y );
 
-game_board = {
-    width: 400,
-    height: 600,
-    pos: [( canvas.width / 2 ) - ( 400 / 2 ), 0],
-    padding_top: Math.round( ( 600 * padding_proportion_top ) / proportion_y ),
-    padding_bottom: Math.round( ( 600 * padding_proportion_bottom ) / proportion_y ),
-    padding_left: ( canvas.width / 2 ) - ( 400 / 2 ),
-    dropshadow: {
-        color: 'rgba(0,0,0,0.35)',
-        offset: ( ( 400 * dropshadow_proportion ) / proportion_x )
-    }
-}
+var game_board_scaled_width = 400;
+var game_board_scaled_height = 600;
 
 if ( x_dominance <= canvas.height ) {
-    game_board.width = canvas.width;
-    game_board.height = x_dominance; 
+    game_board_scaled_width = canvas.width;
+    game_board_scaled_height = x_dominance; 
 } else if ( y_dominance <= canvas.width ) {
-    game_board.height = canvas.height;
-    game_board.width = y_dominance;
+    game_board_scaled_height = canvas.height;
+    game_board_scaled_width = y_dominance;
 } 
+
+game_board = {
+    width: game_board_scaled_width,
+    height: game_board_scaled_height,
+    pos: [( canvas.width / 2 ) - ( game_board_scaled_width / 2 ), 0],
+    padding_top: Math.round( ( game_board_scaled_height * padding_proportion_top ) / proportion_y ),
+    padding_bottom: Math.round( ( game_board_scaled_height * padding_proportion_bottom ) / proportion_y ),
+    padding_left: ( canvas.width / 2 ) - ( game_board_scaled_width / 2 ),
+    dropshadow: {
+        color: 'rgba(0,0,0,0.35)',
+        offset: ( ( game_board_scaled_width * dropshadow_proportion ) / proportion_x )
+    }
+}
 
 var paddle_speed = 300;
 
