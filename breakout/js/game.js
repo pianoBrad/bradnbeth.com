@@ -36,20 +36,20 @@ var canvas = document.createElement("canvas");
 var ctx = canvas.getContext("2d");
 canvas.width =  window.innerWidth; //640; //display_size.width //320;//512;
 canvas.height = window.innerHeight; //480; //display_size.height //568;//480;
+var game_board_proportion_x = 400;
+var game_board_proportion_y = 600;
 var proportion_x = 60; //320;
 var proportion_y = 90; //568;
 var padding_proportion_top = 8;
 var padding_proportion_bottom = 8;
 var paddle_proportion_x = 10;
 var paddle_proportion_y = 3;
+
+var paddle_speed_proportion = 300;
+var ball_speed_proportion_x = 150;
+var ball_speed_proportion_y = 150;
 //var paddle_width = 100;
 //var paddle_height = 25;
-var paddle_speed = 300;
-
-var ball_proportion_width = 3;
-var ball_proportion_height = 3;
-var ball_x_speed = 150;
-var ball_y_speed = 150;
 
 var block_proportion_width = 4;
 var block_proportion_height = 3;
@@ -214,6 +214,11 @@ var isMobile = {
 
 // Game states
 
+//Determine actual size of game board, based on canvas size & game board proportion
+
+var x_dominance = ( (canvas.width * game_board_proportion_y) / game_board_proportion_x );
+var y_dominance = ( (canvas.height * game_board_proportion_x ) / game_board_proportion_y );
+
 game_board = {
     width: 400,
     height: 600,
@@ -226,6 +231,22 @@ game_board = {
         offset: ( ( 400 * dropshadow_proportion ) / proportion_x )
     }
 }
+
+if ( x_dominance <= canvas.height ) {
+    game_board.width = canvas.width;
+    game_board.height = x_dominance; 
+} else if ( y_dominance <= canvas.width ) {
+    game_board.height = canvas.height;
+    game_board.width = y_dominance;
+} 
+
+var paddle_speed = 300;
+
+var ball_proportion_width = 3;
+var ball_proportion_height = 3;
+var ball_x_speed = (( game_board.width * ball_speed_proportion_x ) / game_board_proportion_x);
+var ball_y_speed = (( game_board.height * ball_speed_proportion_y ) / game_board_proportion_y );
+
 
 var block = {
     proportion_width: 4,
@@ -451,7 +472,7 @@ function handle_input(dt) {
         paddle.is_moving = true;
         paddle.is_moving_right = true;
     } else if ( input.isDown('LEFT') && game.blocks_in_play && !game.is_over ) {
-        if ( !game.is_running && game.is_reset ) { game.is_reset = false; gameball.is_moving_right = false; launch_ball(); };
+        if ( !game.is_running && game.is_reset ) { game.is_reset = false; ball.is_moving_right = false; launch_ball(); };
         //console.log('LEFT');
         paddle.is_moving = true;
         paddle.is_moving_right = false;
