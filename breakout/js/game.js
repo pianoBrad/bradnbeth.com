@@ -45,9 +45,8 @@ var padding_proportion_bottom = 8;
 var paddle_proportion_x = 10;
 var paddle_proportion_y = 3;
 
-var paddle_speed_proportion = 300;
-var ball_speed_proportion_x = 150;
-var ball_speed_proportion_y = 150;
+var paddle_speed_proportion = 150;
+var ball_speed_proportion = 150;
 //var paddle_width = 100;
 //var paddle_height = 25;
 
@@ -243,12 +242,10 @@ game_board = {
     }
 }
 
-var paddle_speed = 300;
+var paddle_speed = ( game_board.width * paddle_speed_proportion ) / game_board_proportion_x;
 
 var ball_proportion_width = 3;
 var ball_proportion_height = 3;
-var ball_x_speed = (( game_board.width * ball_speed_proportion_x ) / game_board_proportion_x);
-var ball_y_speed = (( game_board.height * ball_speed_proportion_y ) / game_board_proportion_y );
 
 
 var block = {
@@ -393,8 +390,8 @@ var paddle = {
     pos: [( ( game_board.width / 2 ) - ( ( ( game_board.width * paddle_proportion_x ) / proportion_x ) / 2 ) ) + (game_board.pos[0]), ( ( game_board.height - ( ( game_board.height * paddle_proportion_y ) / proportion_y )) - hud.height )],
     x2: ( (game_board.width / 2) + ( ( ( game_board.width * paddle_proportion_x ) / proportion_x ) / 2 ) ),
     y2: ( game_board.height - ( game_board.height/10 ) ),
-    height: ( ( game_board.height * paddle_proportion_y ) / proportion_y ) ,
-    width: ( ( game_board.width * paddle_proportion_x ) / proportion_x ) ,
+    height: Math.round( ( game_board.height * paddle_proportion_y ) / proportion_y ) ,
+    width: Math.round( ( game_board.width * paddle_proportion_x ) / proportion_x ) ,
     color: 'rgb( 254, 238, 106)',
     speed: paddle_speed,
     is_moving: false,
@@ -405,10 +402,13 @@ var paddle = {
 var ball = {
     starting_pos: [ (game_board.width / 2) - ( ( ( game_board.width * ball_proportion_width ) / proportion_x ) /2 ) + (game_board.pos[0]), (paddle.pos[1]-( ( game_board.height * ball_proportion_height ) / proportion_y ))],
     pos: [ (game_board.width / 2) - ( ( ( game_board.width * ball_proportion_width ) / proportion_x ) /2 ) + (game_board.pos[0]), (paddle.pos[1]-( ( game_board.height * ball_proportion_height ) / proportion_y ))],
-    x2: ( (canvas.width / 2) + ( ( game_board.width * ball_proportion_width ) / proportion_x ) ),
-    y2: ( (canvas.height / 2) + ( ( game_board.height * ball_proportion_height ) / proportion_y ) ),
+    x2: (game_board.width / 2) - ( ( ( game_board.width * ball_proportion_width ) / proportion_x ) /2 ) + (game_board.pos[0]) + Math.round( ( game_board.width * ball_proportion_width ) / proportion_x ),
+    y2: (paddle.pos[1]-( ( game_board.height * ball_proportion_height ) / proportion_y )) + Math.round( ( game_board.height * ball_proportion_height ) / proportion_y ),
     height: Math.round( ( game_board.height * ball_proportion_height ) / proportion_y ),
     width: Math.round( ( game_board.width * ball_proportion_width ) / proportion_x ),
+    radius: (Math.round( ( game_board.height * ball_proportion_height ) / proportion_y ) / 2),
+    speed_x : ((( game_board.width * ball_speed_proportion ) / game_board_proportion_x) * 1),
+    speed_y : ((( game_board.height * ball_speed_proportion ) / game_board_proportion_y ) * 1),
     is_moving: true,
     is_moving_down: false,
     is_moving_right: true,
@@ -471,7 +471,7 @@ function handle_input(dt) {
     if( input.isDown('RIGHT') && game.blocks_in_play && !game.is_over ) {
         if ( !game.is_running && game.is_reset ) { game.is_reset = false; ball.is_moving_right = true; launch_ball(); };
         //console.log('RIGHT');
-        console.log(game.blocks_in_play);
+        //console.log(game.blocks_in_play);
         paddle.is_moving = true;
         paddle.is_moving_right = true;
     } else if ( input.isDown('LEFT') && game.blocks_in_play && !game.is_over ) {
@@ -513,7 +513,7 @@ function handle_input(dt) {
         var tapping = { left: false, right: true }
 
         current_mouse_pressed_coords = input.return_coords();
-        if ( current_mouse_pressed_coords.x <= (canvas.width / 2) ) { console.log('touching left site. '); tapping.left = true; tapping.right = false; } else { tapping.left = false; tapping.right = true; }
+        if ( current_mouse_pressed_coords.x <= (canvas.width / 2) ) { console.log('touching left side. '); tapping.left = true; tapping.right = false; } else { tapping.left = false; tapping.right = true; }
 
         if ( !game.is_running && game.is_reset && !tapping.left && !currently_touching ) { ball.is_moving_right = true; game.is_reset = false; launch_ball(); }
         else if ( !game.is_running && game.is_reset && tapping.left && !currently_touching ) { ball.is_moving_right = false; game.is_reset = false; launch_ball(); };
@@ -566,20 +566,20 @@ function update_entities( dt ) {
     if ( ball.is_moving && game.is_running ) {
         switch(ball.is_moving_right) {
             case false:
-                ball.pos[0] -= ( ball_x_speed * dt );
+                ball.pos[0] -= ( ball.speed_x * dt );
                 ball.x2 = ball.pos[0] + ball.width;
                 break;
             case true:
-                ball.pos[0] += ( ball_x_speed * dt );
+                ball.pos[0] += ( ball.speed_x * dt );
                 ball.x2 = ball.pos[0] + ball.width;
             }
         switch(ball.is_moving_down) {
             case false:
-                ball.pos[1] -= ( ball_y_speed * dt );
+                ball.pos[1] -= ( ball.speed_y * dt );
                 ball.y2 = ball.pos[1] + ball.height;
                 break;
             case true:
-                ball.pos[1] += ( ball_y_speed * dt );
+                ball.pos[1] += ( ball.speed_y * dt );
                 ball.y2 = ball.pos[1] + ball.height;
                 break;
         }
@@ -606,6 +606,72 @@ function update_entities( dt ) {
 
 }
 
+// New Collision tests
+var collisions = {
+    intercept: function(x1, y1, x2, y2, x3, y3, x4, y4, d) {
+      var denom = ((y4-y3) * (x2-x1)) - ((x4-x3) * (y2-y1));
+      //console.log("x1: "+x1+", y1: "+y1+", x2: "+x2+", y2: "+y2+", x3: "+x3+", y3: "+y3+", x4: "+x4+", y4: "+y4+", d: "+d)
+      //console.log(denom);
+      if (denom != 0) {
+        var ua = (((x4-x3) * (y1-y3)) - ((y4-y3) * (x1-x3))) / denom;
+        //console.log('checking ua: '+ua);
+        if ((ua >= 0) && (ua <= 0.5)) {
+          var ub = (((x2-x1) * (y1-y3)) - ((y2-y1) * (x1-x3))) / denom;
+          if ((ub >= 0) && (ub <= 1)) {
+            var x = x1 + (ua * (x2-x1));
+            var y = y1 + (ua * (y2-y1));
+            //console.log( "x: "+x+", y: "+y+", d: "+d ) 
+            return { x: x, y: y, d: d};
+          }
+        }
+      }
+      return null;
+    },
+
+    ballIntercept: function(ball, rect, nx, ny) {
+      var pt;
+      if (!ny) {
+        //console.log('check bottom side..');
+        pt = collisions.intercept(ball.pos[0], ball.pos[1], ball.pos[0] + ball.width, ball.pos[1] + ball.height, 
+                                     rect.left   - ball.radius, 
+                                     rect.bottom + ball.radius, 
+                                     rect.right  + ball.radius, 
+                                     rect.bottom + ball.radius,
+                                     "bottom");
+      }
+      else if (ny) {
+        //console.log('check top side..');
+        pt = collisions.intercept(ball.pos[0], ball.pos[1], ball.pos[0] + ball.width, ball.pos[1] + ball.height, 
+                                     rect.left   - ball.radius, 
+                                     rect.top    - ball.radius, 
+                                     rect.right  + ball.radius, 
+                                     rect.top    - ball.radius,
+                                     "top");
+        }
+      if (!pt) {
+        if (!nx) {
+            console.log('check right side..');
+            pt = collisions.intercept(ball.pos[0], ball.pos[1], ball.pos[0] + ball.width, ball.pos[1] + ball.height, 
+                                   rect.right  + ball.radius, 
+                                   rect.top    - ball.radius, 
+                                   rect.right  + ball.radius, 
+                                   rect.bottom + ball.radius, 
+                                   "right");
+        }
+        else if (nx) {
+            console.log('check left side..');
+            pt = collisions.intercept(ball.pos[0], ball.pos[1], ball.pos[0] + ball.width, ball.pos[1] + ball.height, 
+                                   rect.left   - ball.radius, 
+                                   rect.top    - ball.radius, 
+                                   rect.left   - ball.radius, 
+                                   rect.bottom + ball.radius,
+                                   "left");
+        }
+      }
+      return pt;
+    }
+
+}
 
 
 // Collisions
@@ -623,6 +689,10 @@ function box_collides(pos, size, pos2, size2) {
 }
 
 function check_collisions() {
+    //ball.is_colliding = false;
+    //console.log(ball.is_colliding);
+
+    //Check ball for collision with game_board
     if ( ball.y2 >= game_board.height ) {
         //ball.is_moving_down = false;
     } else if ( ball.x2 >= ( game_board.width + game_board.pos[0] )  ) {
@@ -638,9 +708,19 @@ function check_collisions() {
         game.round_cleared = true;
         reset();
     }
+
+
+    if ( ball.pos[1] > ((-blocks_initial_starting_y) + game_board.padding_top ) && ball.y2 < paddle.pos[1] ) {
+        ball.is_colliding = false;
+    } 
     
+
+    //Check ball for collision with paddle (if ball position is within range of paddle position)
+    //console.log(ball.y2+' '+(paddle.pos[1]-paddle.height) );
+    if ( game.is_running && ( ball.y2 >= ( paddle.pos[1] - paddle.height ) ) ) {
+
+    /**
     if ( box_collides( ball.pos, [ball.width, ball.height], paddle.pos, [paddle.width, paddle.height] ) ) {
-        //if ( !ball.is_colliding && ball.pos[1] >= ( paddle.pos[1] ) ) {
         if ( !ball.is_colliding &&
              (
              (ball.x2 >= paddle.pos[0] && ball.pos[0] <= paddle.pos[0] ) ||
@@ -656,38 +736,57 @@ function check_collisions() {
             ball.is_moving_down = !ball.is_moving_down;
         }
         
-    } else {
-        ball.is_colliding = false;
+    }
+    **/
+        var pt = collisions.ballIntercept( ball, { left: paddle.pos[0], right: paddle.x2, top: paddle.pos[1], bottom: paddle.y2}, ball.is_moving_right, ball.is_moving_down );
+        //console.log( ball.speed_x+' '+ball.speed_y );
+        
+        if ( pt  ) {
+            switch(pt.d)
+            {
+                case 'top':
+                    ball.is_moving_down = !ball.is_moving_down;
+                    break;
+                case 'left':
+                case 'right':
+                    //console.log('hitting '+pt.d+' side of paddle!');
+                    ball.is_moving_right = !ball.is_moving_right;
+                    break;
+
+            }
+        }
     }
 
+    
+
+
+    //Check ball for collision with blocks
     for ( b = 0; b < blocks.length; b++ ) {
         if ( box_collides( ball.pos, [ball.width, ball.height], blocks[b].pos, [blocks[b].width, blocks[b].height ] ) && !blocks[b].is_cleared ) {
             //console.log('hitting a block!');
             if ( !ball.is_colliding &&
                  (
-                 (ball.x2 >= blocks[b].pos[0] && ball.pos[0] <= blocks[b].pos[0] ) ||
-                 (ball.pos[0] <= blocks[b].x2 && ball.x2 >= blocks[b].x2)
+                 (ball.x2 >= blocks[b].pos[0] && ball.pos[0] < blocks[b].pos[0] ) ||
+                 (ball.pos[0] <= blocks[b].x2 && ball.x2 > blocks[b].x2)
                  ) 
                ) {
-                ball.is_colliding = true;
                 ball.is_moving_right = !ball.is_moving_right;
-                blocks[b].is_cleared = true;
-                game.score++;
-                blocks.splice(b, 1);
+                
             } else if ( 
                 !ball.is_colliding 
               ) {
-                ball.is_colliding = true;
                 ball.is_moving_down = !ball.is_moving_down;
-                blocks[b].is_cleared = true;
-                game.score++;
-                blocks.splice(b, 1);
                 //console.log('top or bottom collision');
             }
+            blocks[b].is_cleared = true;
+            blocks.splice(b, 1);
+            game.score++;
+            ball.is_colliding = true;
         } else {
-            ball.is_colliding = false;
+            //ball.is_colliding = false;
         }
     } 
+
 
 }
 
@@ -863,6 +962,7 @@ function reset() {
     game.blocks_in_play = false;
 
     ball.is_moving = false;
+    ball.is_moving_down = false;
     ball.pos[0] = ball.starting_pos[0];
     ball.pos[1] = ball.starting_pos[1];
 
