@@ -598,6 +598,7 @@ function update_entities( dt ) {
         game.display_title = false;
         for( b=0; b < blocks.length; b++) {
             blocks[b].pos[1] += 10;
+            blocks[b].y2 = blocks[b].pos[1] + blocks[b].height;
         }
     }  else if ( game.blocks_animating ) {
         game.blocks_animating = false;
@@ -761,30 +762,64 @@ function check_collisions() {
 
 
     //Check ball for collision with blocks
-    for ( b = 0; b < blocks.length; b++ ) {
-        if ( box_collides( ball.pos, [ball.width, ball.height], blocks[b].pos, [blocks[b].width, blocks[b].height ] ) && !blocks[b].is_cleared ) {
-            //console.log('hitting a block!');
-            if ( !ball.is_colliding &&
-                 (
-                 (ball.x2 >= blocks[b].pos[0] && ball.pos[0] < blocks[b].pos[0] ) ||
-                 (ball.pos[0] <= blocks[b].x2 && ball.x2 > blocks[b].x2)
-                 ) 
+    if (game.is_running && ball.is_moving) {
+        for ( b = 0; b < blocks.length; b++ ) {
+            if ( 
+                ( ball.pos[1] >= ( blocks[b].pos[1] - blocks[b].height) && ball.pos[1] <= (blocks[b].y2 + blocks[b].height) ) &&
+                ( ball.pos[0] >= ( blocks[b].pos[0] - blocks[b].width ) && ball.pos[0] <= (blocks[b].x2 + blocks[b].width ) )
+
                ) {
+                var pt = collisions.ballIntercept( ball, { left: blocks[b].pos[0], right: blocks[b].x2, top: blocks[b].pos[1], bottom: blocks[b].y2}, ball.is_moving_right, ball.is_moving_down );
+                console.log("{ left: "+blocks[b].pos[0]+", right: "+blocks[b].x2+", top: "+blocks[b].pos[1]+", bottom: "+blocks[b].y2+"}");
+                if ( pt  ) {
+                switch(pt.d)
+                {
+                    case 'top':
+                        //ball.is_moving_down = !ball.is_moving_down;
+                        console.log('hitting '+pt.d+' side of block!');
+                        ball.is_moving_down = !ball.is_moving_down;
+                        break;
+                    case 'left':
+                    case 'right':
+                        console.log('hitting '+pt.d+' side of block!');
+                        //ball.is_moving_right = !ball.is_moving_right;
+                        ball.is_moving_right = !ball.is_moving_right;
+                        break;
+
+                }
+                blocks[b].is_cleared = true;
+                blocks.splice(b, 1);
+                game.score++;
+                ball.is_colliding = true;
+                }
+
+            }
+            
+            /**
+            if ( box_collides( ball.pos, [ball.width, ball.height], blocks[b].pos, [blocks[b].width, blocks[b].height ] ) && !blocks[b].is_cleared ) {
+                if ( !ball.is_colliding &&
+                     (
+                    (ball.x2 >= blocks[b].pos[0] && ball.pos[0] < blocks[b].pos[0] ) ||
+                    (ball.pos[0] <= blocks[b].x2 && ball.x2 > blocks[b].x2)
+                    ) 
+                ) {
                 ball.is_moving_right = !ball.is_moving_right;
                 
-            } else if ( 
+                } else if ( 
                 !ball.is_colliding 
-              ) {
+                ) {
                 ball.is_moving_down = !ball.is_moving_down;
-                //console.log('top or bottom collision');
+                }
+                blocks[b].is_cleared = true;
+                blocks.splice(b, 1);
+                game.score++;
+                ball.is_colliding = true;
+            } else {
             }
-            blocks[b].is_cleared = true;
-            blocks.splice(b, 1);
-            game.score++;
-            ball.is_colliding = true;
-        } else {
-            //ball.is_colliding = false;
+            **/
+
         }
+
     } 
 
 
