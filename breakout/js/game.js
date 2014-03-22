@@ -244,8 +244,8 @@ game_board = {
 
 var paddle_speed = ( game_board.width * paddle_speed_proportion ) / game_board_proportion_x;
 
-var ball_proportion_width = 3;
-var ball_proportion_height = 3;
+var ball_proportion_width = 2;
+var ball_proportion_height = 2;
 
 
 var block = {
@@ -764,33 +764,43 @@ function check_collisions() {
     //Check ball for collision with blocks
     if (game.is_running && ball.is_moving) {
         for ( b = 0; b < blocks.length; b++ ) {
+            var collisions_this_frame = 0;
             if ( 
                 ( ball.pos[1] >= ( blocks[b].pos[1] - blocks[b].height) && ball.pos[1] <= (blocks[b].y2 + blocks[b].height) ) &&
                 ( ball.pos[0] >= ( blocks[b].pos[0] - blocks[b].width ) && ball.pos[0] <= (blocks[b].x2 + blocks[b].width ) )
 
                ) {
                 var pt = collisions.ballIntercept( ball, { left: blocks[b].pos[0], right: blocks[b].x2, top: blocks[b].pos[1], bottom: blocks[b].y2}, ball.is_moving_right, ball.is_moving_down );
-                console.log("{ left: "+blocks[b].pos[0]+", right: "+blocks[b].x2+", top: "+blocks[b].pos[1]+", bottom: "+blocks[b].y2+"}");
+                //console.log("{ left: "+blocks[b].pos[0]+", right: "+blocks[b].x2+", top: "+blocks[b].pos[1]+", bottom: "+blocks[b].y2+"}");
                 if ( pt  ) {
+                    ball.is_colliding = true;
+                    collisions_this_frame++;
                 switch(pt.d)
                 {
                     case 'top':
+                    case 'bottom':
                         //ball.is_moving_down = !ball.is_moving_down;
+                        if(collisions_this_frame <= 1) {
+                            ball.is_moving_down = !ball.is_moving_down;
+                        }
+                        
                         console.log('hitting '+pt.d+' side of block!');
-                        ball.is_moving_down = !ball.is_moving_down;
                         break;
                     case 'left':
                     case 'right':
+                        if ( collisions_this_frame <= 1 ) {
+                            ball.is_moving_right = !ball.is_moving_right;
+                        }
+                        
                         console.log('hitting '+pt.d+' side of block!');
                         //ball.is_moving_right = !ball.is_moving_right;
-                        ball.is_moving_right = !ball.is_moving_right;
                         break;
 
                 }
                 blocks[b].is_cleared = true;
                 blocks.splice(b, 1);
                 game.score++;
-                ball.is_colliding = true;
+                //ball.is_colliding = true;
                 }
 
             }
