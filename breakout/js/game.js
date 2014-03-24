@@ -986,6 +986,10 @@ function render() {
             ctx.fillStyle="#666666";
             ctx.fillRect(game_board.pos[0], 0, canvas.width, game_board.pos[1]);
             ctx.fillRect( game_board.pos[0], (game_board.pos[1] + game_board.height), canvas.width, canvas.height );
+        } else if ( game_board.pos[0] > 0 ) {
+            ctx.fillStyle="#666666";
+            ctx.fillRect(0, 0, game_board.pos[0], canvas.height);
+            ctx.fillRect( (game_board.pos[0] + game_board.width), 0, canvas.width, canvas.height );
         }
 };
 
