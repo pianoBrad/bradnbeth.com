@@ -339,6 +339,14 @@ var hud_mid = {
     height: (game_board.pos[1] + game_board.height) -  ( (-blocks_initial_starting_y) + game_board.padding_bottom ) ,
     width: game_board.width,
     pos: [game_board.pos[0], (game_board.pos[1] + ((-blocks_initial_starting_y) + game_board.padding_top)) ],
+    center: [ ((canvas.width) / 2), ((game_board.pos[1] + ((-blocks_initial_starting_y) + game_board.padding_top)) + (((game_board.pos[1] + game_board.height) -  ( (-blocks_initial_starting_y) + game_board.padding_bottom ))/2) ) ],
+    text_props: {
+        line_height: 10,
+        font: ( (game_board.height - (game_board.pos[1] + ( (-blocks_initial_starting_y) + game_board.padding_bottom ) )) / 10)+'px press_start_2pregular',
+        textBaseline: 'middle',
+        textAlign: 'center',
+        fillStyle: '#FFFFFF'  
+    },
     title: {
         text_props: {
             line_height: 10,
@@ -350,6 +358,18 @@ var hud_mid = {
         strings: {
             bassel: "Bassel",
             breakout: "BreaKout!"
+        }
+    },
+    success: {
+        text_props: {},
+        strings: {
+            success: "Success!"
+        }
+    },
+    fail: {
+        text_props: {},
+        strings: {
+            fail: "Game Over"
         }
     }
 
@@ -966,6 +986,13 @@ function render() {
             ctx.textAlign = hud_top.next_round.text_props.textAlign;
             ctx.fillStyle = hud_top.next_round.text_props.fillStyle;
             ctx.fillText(hud_top.next_round.strings.try_again, (game_board.pos[0] + (game_board.width/2) ), game_board.pos[1] + (hud_top.height / 2) );
+
+            //Display success message
+            ctx.font = hud_mid.text_props.font;
+            ctx.textAlign = hud_mid.text_props.textAlign;
+            ctx.fillStyle = hud_mid.text_props.fillStyle;
+            ctx.fillText( hud_mid.success.strings.success, hud_mid.center[0], hud_mid.center[1] );
+
         } else if ( game.is_over ) {
             //Display try again message in top_hud
             ctx.font = hud_top.try_again.text_props.font;
@@ -973,6 +1000,13 @@ function render() {
             ctx.textAlign = hud_top.try_again.text_props.textAlign;
             ctx.fillStyle = hud_top.try_again.text_props.fillStyle;
             ctx.fillText(hud_top.try_again.strings.try_again, (game_board.pos[0] + (game_board.width/2) ), game_board.pos[1] + (hud_top.height / 2) );
+
+            //Display 'Game Over' in mid hud
+            ctx.font = hud_mid.text_props.font;
+            ctx.textAlign = hud_mid.text_props.textAlign;
+            ctx.textBaseline = hud_mid.text_props.textBaseline;
+            ctx.fillStyle = hud_mid.text_props.fillStyle;
+            ctx.fillText( hud_mid.fail.strings.fail, hud_mid.center[0], hud_mid.center[1] );            
         }
 
         // Border
