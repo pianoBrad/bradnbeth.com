@@ -232,7 +232,7 @@ if ( x_dominance <= canvas.height ) {
 game_board = {
     width: game_board_scaled_width,
     height: game_board_scaled_height,
-    pos: [( canvas.width / 2 ) - ( game_board_scaled_width / 2 ), 0],
+    pos: [( canvas.width / 2 ) - ( game_board_scaled_width / 2 ), ( (canvas.height / 2) - ( game_board_scaled_height / 2 ) )],
     padding_top: Math.round( ( game_board_scaled_height * padding_proportion_top ) / proportion_y ),
     padding_bottom: Math.round( ( game_board_scaled_height * padding_proportion_bottom ) / proportion_y ),
     padding_left: ( canvas.width / 2 ) - ( game_board_scaled_width / 2 ),
@@ -755,12 +755,14 @@ function check_collisions() {
                     ball.is_moving_down = !ball.is_moving_down;
 
                     var distance_from_center = paddle.center.x - ball.center.x
-                    if ( distance_from_center < 0 ) { distance_from_center = -distance_from_center }
+                    if ( distance_from_center < 0 ) { 
+                        distance_from_center = -distance_from_center 
+                        ball.is_moving_right = true;
+                    } else { ball.is_moving_right = false; }
 
                     // Calculate angle of spin
                     var s = distance_from_center / ( paddle.width / 2 );
                     if ( s > 1 ) { s=1; }
-                    s = s
 
                     console.log(s);
                     ball.spin = s;
