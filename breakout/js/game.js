@@ -45,7 +45,7 @@ var padding_proportion_bottom = 8;
 var paddle_proportion_x = 10;
 var paddle_proportion_y = 3;
 
-var paddle_speed_proportion = 150;
+var paddle_speed_proportion = 200;
 var ball_speed_proportion = 150;
 //var paddle_width = 100;
 //var paddle_height = 25;
@@ -390,6 +390,7 @@ var paddle = {
     pos: [( ( game_board.width / 2 ) - ( ( ( game_board.width * paddle_proportion_x ) / proportion_x ) / 2 ) ) + (game_board.pos[0]), ( ( game_board.height - ( ( game_board.height * paddle_proportion_y ) / proportion_y )) - hud.height )],
     x2: ( (game_board.width / 2) + ( ( ( game_board.width * paddle_proportion_x ) / proportion_x ) / 2 ) ),
     y2: ( game_board.height - ( game_board.height/10 ) ),
+    center: {x: 0,y: 0}, 
     height: Math.round( ( game_board.height * paddle_proportion_y ) / proportion_y ) ,
     width: Math.round( ( game_board.width * paddle_proportion_x ) / proportion_x ) ,
     color: 'rgb( 254, 238, 106)',
@@ -404,17 +405,18 @@ var ball = {
     pos: [ (game_board.width / 2) - ( ( ( game_board.width * ball_proportion_width ) / proportion_x ) /2 ) + (game_board.pos[0]), (paddle.pos[1]-( ( game_board.height * ball_proportion_height ) / proportion_y ))],
     x2: (game_board.width / 2) - ( ( ( game_board.width * ball_proportion_width ) / proportion_x ) /2 ) + (game_board.pos[0]) + Math.round( ( game_board.width * ball_proportion_width ) / proportion_x ),
     y2: (paddle.pos[1]-( ( game_board.height * ball_proportion_height ) / proportion_y )) + Math.round( ( game_board.height * ball_proportion_height ) / proportion_y ),
+    center: {x: 0,y: 0},
     height: Math.round( ( game_board.height * ball_proportion_height ) / proportion_y ),
     width: Math.round( ( game_board.width * ball_proportion_width ) / proportion_x ),
     radius: (Math.round( ( game_board.height * ball_proportion_height ) / proportion_y ) / 2),
     speed_x : ((( game_board.width * ball_speed_proportion ) / game_board_proportion_x) * 1),
     speed_y : ((( game_board.height * ball_speed_proportion ) / game_board_proportion_y ) * 1),
+    spin : 1,
     is_moving: true,
     is_moving_down: false,
     is_moving_right: true,
     is_colliding: false,
     animating_speed: 100,
-    center: [ 0,0 ],
     sprite: new Sprite(ball_url, [0, 0], [ball_source_width, ball_source_height], 10, [0], 'horizontal', [ ( ( ( game_board.width * ball_proportion_width ) / proportion_x ) / ball_source_width ) , ( ( ( game_board.height * ball_proportion_height ) / proportion_y ) / ball_source_height )])
 }
 
@@ -561,16 +563,19 @@ function update_entities( dt ) {
         paddle.pos[0] = ( game_board.pos[0] + game_board.width ) - paddle.width;
     }
 
+    paddle.center.x = paddle.pos[0] + (paddle.width / 2);
+    paddle.center.y = paddle.pos[1] + (paddle.height/ 2);
+
 
     // Ball Movement
     if ( ball.is_moving && game.is_running ) {
         switch(ball.is_moving_right) {
             case false:
-                ball.pos[0] -= ( ball.speed_x * dt );
+                ball.pos[0] -= (( ball.speed_x * dt ) * ball.spin);
                 ball.x2 = ball.pos[0] + ball.width;
                 break;
             case true:
-                ball.pos[0] += ( ball.speed_x * dt );
+                ball.pos[0] += (( ball.speed_x * dt ) * ball.spin);
                 ball.x2 = ball.pos[0] + ball.width;
             }
         switch(ball.is_moving_down) {
@@ -581,11 +586,12 @@ function update_entities( dt ) {
             case true:
                 ball.pos[1] += ( ball.speed_y * dt );
                 ball.y2 = ball.pos[1] + ball.height;
+
                 break;
         }
 
-        ball.center[0] = (ball.pos[0] + ball.x2)/2;
-        ball.center[1] = (ball.pos[1] + ball.y2)/2;
+        ball.center.x = (ball.pos[0] + (ball.width/2));
+        ball.center.y = (ball.pos[1] + (ball.height/2));
 
         if ( ball.pos[1] >= game_board.height ) {
             game.is_over = true;
@@ -651,7 +657,7 @@ var collisions = {
         }
       if (!pt) {
         if (!nx) {
-            console.log('check right side..');
+            //console.log('check right side..');
             pt = collisions.intercept(ball.pos[0], ball.pos[1], ball.pos[0] + ball.width, ball.pos[1] + ball.height, 
                                    rect.right  + ball.radius, 
                                    rect.top    - ball.radius, 
@@ -660,7 +666,7 @@ var collisions = {
                                    "right");
         }
         else if (nx) {
-            console.log('check left side..');
+            //console.log('check left side..');
             pt = collisions.intercept(ball.pos[0], ball.pos[1], ball.pos[0] + ball.width, ball.pos[1] + ball.height, 
                                    rect.left   - ball.radius, 
                                    rect.top    - ball.radius, 
@@ -675,8 +681,8 @@ var collisions = {
 }
 
 
-// Collisions
-
+// Collisions (old)
+/**
 function collides(x, y, r, b, x2, y2, r2, b2) {
     return !(r <= x2 || x > r2 ||
              b <= y2 || y > b2);
@@ -688,6 +694,7 @@ function box_collides(pos, size, pos2, size2) {
                     pos2[0], pos2[1],
                     pos2[0] + size2[0], pos2[1] + size2[1]);
 }
+**/
 
 function check_collisions() {
     //ball.is_colliding = false;
@@ -741,12 +748,22 @@ function check_collisions() {
     **/
         var pt = collisions.ballIntercept( ball, { left: paddle.pos[0], right: paddle.x2, top: paddle.pos[1], bottom: paddle.y2}, ball.is_moving_right, ball.is_moving_down );
         //console.log( ball.speed_x+' '+ball.speed_y );
-        
-        if ( pt  ) {
+        if ( pt ) {
             switch(pt.d)
             {
                 case 'top':
                     ball.is_moving_down = !ball.is_moving_down;
+
+                    var distance_from_center = paddle.center.x - ball.center.x
+                    if ( distance_from_center < 0 ) { distance_from_center = -distance_from_center }
+
+                    // Calculate angle of spin
+                    var s = distance_from_center / ( paddle.width / 2 );
+                    if ( s > 1 ) { s=1; }
+                    s = s
+
+                    console.log(s);
+                    ball.spin = s;
                     break;
                 case 'left':
                 case 'right':
@@ -784,7 +801,7 @@ function check_collisions() {
                             ball.is_moving_down = !ball.is_moving_down;
                         }
                         
-                        console.log('hitting '+pt.d+' side of block!');
+                        //console.log('hitting '+pt.d+' side of block!');
                         break;
                     case 'left':
                     case 'right':
@@ -792,7 +809,7 @@ function check_collisions() {
                             ball.is_moving_right = !ball.is_moving_right;
                         }
                         
-                        console.log('hitting '+pt.d+' side of block!');
+                        //console.log('hitting '+pt.d+' side of block!');
                         //ball.is_moving_right = !ball.is_moving_right;
                         break;
 
