@@ -1,3 +1,11 @@
+/**********************************************
+                TO-DOs
+-----------------------------------------------
+
+    * Center the background tile
+
+**********************************************/
+
 // A cross-browser requestAnimationFrame
 // See https://hacks.mozilla.org/2011/08/animating-with-javascript-from-setinterval-to-requestanimationframe/
 var requestAnimFrame = (function(){
@@ -55,6 +63,8 @@ var block_proportion_height = 3;
 
 var bassel_proportion_width = 22;
 var bassel_proportion_height = 31;
+
+var prison_background_proportion = 38;
 
 var dropshadow_proportion = 1;
 // Set styles of hud elements, based on canvas size
@@ -176,6 +186,7 @@ if ( use_svg == false ) {
 
 
 // Get the resources for the game
+var background_tile_url = 'images/background-tile.'+file_extension;
 var bassel_url = 'images/bassel.'+file_extension;
 var paddle_url = 'images/paddle.'+file_extension;
 var ball_url = 'images/ball.'+file_extension;
@@ -184,6 +195,7 @@ var block_url = {
 }
 
 resources.load([
+    background_tile_url,
     bassel_url,
     paddle_url,
     ball_url,
@@ -266,6 +278,8 @@ var blocks_total_columns = 11;
 var blocks_total_rows = 12;
 var blocks_initial_starting_y = game_board.pos[1] - ( game_board.padding_top + ( blocks_total_rows * block.height ) ); 
 var block_starting_x = Math.round( (( game_board.width - (blocks_total_columns * block.width) ) / 2) + game_board.pos[0] );
+var one_pixel_x = (game_board.width) / proportion_x;
+var one_pixel_y = (game_board.height) / proportion_y;
 
 var game = {
     is_reset: false,
@@ -284,7 +298,8 @@ var game = {
         pos: [game_board.pos[0], game_board.pos[1]],
         width: game_board.width,
         height: game_board.height,
-        color: 'rgb(55,55,55)'
+        //color: 'rgb(55,55,55)'
+        color: 'rgb(0,73,94)'
     }
 }
 
@@ -442,7 +457,6 @@ var ball = {
     sprite: new Sprite(ball_url, [0, 0], [ball_source_width, ball_source_height], 10, [0], 'horizontal', [ ( ( ( game_board.width * ball_proportion_width ) / proportion_x ) / ball_source_width ) , ( ( ( game_board.height * ball_proportion_height ) / proportion_y ) / ball_source_height )])
 }
 
-
 var bassel = {
     starting_pos: [ 
         ( game_board.width / 2 ) - ( (( game_board.width * bassel_proportion_width ) / proportion_x) / 2 ) + game_board.pos[0] , 
@@ -453,6 +467,46 @@ var bassel = {
     width: ( game_board.width * bassel_proportion_width ) / proportion_x,
     height: ( game_board.height * bassel_proportion_height ) / proportion_y,
     sprite: new Sprite(bassel_url, [0, 0], [bassel_source_width, bassel_source_height], 10, [0], 'horizontal', [ ( (( game_board.width * bassel_proportion_width ) / proportion_x) / bassel_source_width ) , ( (( game_board.height * bassel_proportion_height ) / proportion_y) / bassel_source_height ) ])
+}
+
+var prison_background = {
+    pos: [ ((game_board.width/2) + game_board.pos[0]) - ( ((game_board.width * prison_background_proportion) / proportion_x) / 2 ),
+            bassel.pos[1] - ( (((game_board.height * prison_background_proportion) / proportion_y) - bassel.height) / 3 )
+         ],
+    color: 'rgb(55,55,55)',
+    border_left: {
+        pos: [(((game_board.width/2) + game_board.pos[0]) - ( ((game_board.width * prison_background_proportion) / proportion_x) / 2 ) - one_pixel_x ),
+            bassel.pos[1] - ( (((game_board.height * prison_background_proportion) / proportion_y) - bassel.height) / 3 )
+        ],
+        width: one_pixel_x,
+        height: (game_board.height * prison_background_proportion) / proportion_y,
+        color: 'rgb(42,42,42)'
+    },
+    border_right: {
+        pos: [((((game_board.width/2) + game_board.pos[0]) - ( ((game_board.width * prison_background_proportion) / proportion_x) / 2 ) + ((game_board.width * prison_background_proportion) / proportion_x) ) ),
+            bassel.pos[1] - ( (((game_board.height * prison_background_proportion) / proportion_y) - bassel.height) / 3 )
+        ],
+        width: one_pixel_x,
+        height: (game_board.height * prison_background_proportion) / proportion_y,
+        color: 'rgb(42,42,42)'
+    },
+    border_top: {
+        pos: [ ((game_board.width/2) + game_board.pos[0]) - ( ((game_board.width * prison_background_proportion) / proportion_x) / 2 ),
+            bassel.pos[1] - ( (((game_board.height * prison_background_proportion) / proportion_y) - bassel.height) / 3 ) - one_pixel_y
+        ],
+        width: (game_board.width * prison_background_proportion) / proportion_x,
+        height: one_pixel_y
+    },
+    border_bottom: {
+        pos: [ (((game_board.width/2) + game_board.pos[0]) - ( ((game_board.width * prison_background_proportion) / proportion_x) / 2 )) - one_pixel_x,
+               (bassel.pos[1] - ( (((game_board.height * prison_background_proportion) / proportion_y) - bassel.height) / 3 ) - one_pixel_y) + (((game_board.height * prison_background_proportion) / proportion_y) + one_pixel_y )
+        ],
+        width: ((game_board.width * prison_background_proportion) / proportion_x) + (one_pixel_x * 2),
+        height: one_pixel_y,
+        color: 'rgb(79,79,79)'
+    },
+    width: (game_board.width * prison_background_proportion) / proportion_x,
+    height: (game_board.height * prison_background_proportion) / proportion_y
 }
 
 
@@ -880,13 +934,36 @@ function check_collisions() {
 
 // Draw everything
 function render() {
+        //Draw background + tile, etc..
         ctx.fillStyle = "#CCCCCC";
         ctx.fillRect(0,0,canvas.width, canvas.height);
 
         draw_rect( game.background, ctx );
 
-        
+        //Tile
+        var tile = new Image();
+        tile.src = background_tile_url;
+        var tile_proportion_x = (game_board.width * 16) / proportion_x;
+
+        var tempCanvas = document.createElement("canvas"),
+        tCtx = tempCanvas.getContext("2d");
+        tempCanvas.width = tile_proportion_x;
+        tempCanvas.height = tile_proportion_x;
+
+        tCtx.drawImage(tile,0,0,tile.width,tile.height,0,0,tile_proportion_x,tile_proportion_x);
+
+        var ptrn = ctx.createPattern(tempCanvas, 'repeat');
+        ctx.fillStyle = ptrn;
+        ctx.fillRect(game_board.pos[0], game_board.pos[1], game_board.width, game_board.height);
             
+        //Draw Bassel prison background square
+        draw_rect(prison_background, ctx);
+        draw_rect(prison_background.border_left, ctx);
+        draw_rect(prison_background.border_right, ctx);
+        draw_rect(prison_background.border_top, ctx);
+        draw_rect(prison_background.border_bottom, ctx);
+
+
         render_entity( bassel );
 
         //Draw Shadows

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="512px"
+	 height="512px" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
+<g id="Background">
+</g>
+<g id="Art">
+	<g>
+		<path fill="#373737" d="M0,0v512h512V0H0z M288,256v32v32h-32h-32h-32v-32v-32v-32h32h32h32V256z"/>
+		<g>
+			<rect y="32" fill="#434343" width="32" height="32"/>
+			<g>
+				<rect x="32" y="64" fill="#434343" width="32" height="32"/>
+				<rect x="64" y="96" fill="#434343" width="32" height="32"/>
+				<rect x="96" y="128" fill="#434343" width="32" height="32"/>
+			</g>
+			<g>
+				<rect x="352" y="384" fill="#434343" width="32" height="32"/>
+				<rect x="384" y="416" fill="#434343" width="32" height="32"/>
+				<rect x="416" y="448" fill="#434343" width="32" height="32"/>
+			</g>
+			<g>
+				<rect x="96" y="384" fill="#434343" width="32" height="32"/>
+				<rect x="64" y="416" fill="#434343" width="32" height="32"/>
+				<rect x="32" y="448" fill="#434343" width="32" height="32"/>
+			</g>
+			<g>
+				<rect x="416" y="64" fill="#434343" width="32" height="32"/>
+				<rect x="384" y="96" fill="#434343" width="32" height="32"/>
+				<rect x="352" y="128" fill="#434343" width="32" height="32"/>
+			</g>
+			<rect x="160" y="64" fill="#434343" width="32" height="32"/>
+			<rect x="128" y="96" fill="#434343" width="32" height="32"/>
+			<rect x="320" y="416" fill="#434343" width="32" height="32"/>
+			<rect x="288" y="448" fill="#434343" width="32" height="32"/>
+			<rect x="319.969" y="96.016" fill="#434343" width="32" height="32"/>
+			<rect x="287.969" y="64.016" fill="#434343" width="32" height="32"/>
+			<rect y="480" fill="#434343" width="32" height="32"/>
+			<rect x="159.969" y="448" fill="#434343" width="32" height="32"/>
+			<rect x="127.969" y="416" fill="#434343" width="32" height="32"/>
+			<rect x="64" y="160" fill="#434343" width="32" height="32"/>
+			<rect x="32" y="192" fill="#434343" width="32" height="32"/>
+			<rect x="32" y="320" fill="#434343" width="32" height="32"/>
+			<rect x="64" y="352" fill="#434343" width="32" height="32"/>
+			<rect x="384" y="160" fill="#434343" width="32" height="32"/>
+			<rect x="416" y="192" fill="#434343" width="32" height="32"/>
+			<rect x="384" y="352" fill="#434343" width="32" height="32"/>
+			<rect x="416" y="320" fill="#434343" width="32" height="32"/>
+			<path fill="#434343" d="M480,0H0v32h192v32h32v32v32v32h-96v96H32v-32H0v32v32v32h32v-32h96v96h96v32v32v32h-32v32h32h32h32v-32
+				h-32v-32v-32v-32h96v-96h96v32h32v160h-32v32h32h32V288v-32V32V0H480z M320,320h-32v32h-96v-32h-32v-96h32v-32h96v32h32V320z
+				 M480,224h-32v32h-96v-96h-96v-32V96V64.016h31.969v-32L448,32v32h32V224z"/>
+		</g>
+	</g>
+</g>
+<g id="Layer_2">
+</g>
+</svg>
