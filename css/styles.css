@@ -1,0 +1,162 @@
+/*****************************************************
+					GLOBAL
+*****************************************************/
+
+html, body, .content-wrap, .content {
+	width: 100%;
+	height: 100%;
+	background-color: transparent;
+}
+
+html {
+	background-image: url("../images/background.png");
+	background-position: center center;
+	background-size: auto 100%;
+}
+
+.nav-arrow-right {
+	width: 0;
+	height: 0;
+	border-style: solid;
+	border-width: 20px 0 20px 15px;
+	border-color: transparent transparent transparent #31bfc4;
+}
+
+.shadow {
+	box-shadow: 0px 3px 3px rgba(0,0,0,0.35);
+}
+
+
+/*****************************************************
+					CONTENT
+*****************************************************/
+
+.wire {
+	position: absolute;
+	top: 40px;
+	left: 0px;
+	width: 100%;
+	height: 4px;
+	background-color: black;
+	z-index: 0;
+	background-color: #d1ac49;
+	border-bottom: 2px solid #8c6b11;
+}
+
+.title {
+	position: relative;
+	z-index: 100;
+	margin-top:25px;
+	margin-bottom: 25px;
+}
+
+.title img {
+	width: 100%;
+	height: auto;
+}
+
+.slider-wrap {}
+
+.flexslider {
+	border-radius: 0px;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+	background-color: transparent;
+}
+
+.flexslider img {
+}
+
+.flexslider .slides > li {
+	position: relative;
+}
+
+.flex-direction-nav i {
+	font-size:40px;
+	line-height: 38px;
+	width:35px;
+	text-align:center;
+	text-shadow:none;
+	color:#FFFFFF;
+}
+
+.flex-caption {
+	font-family: 'architects_daughterregular', sans-serif;
+	text-align: right;
+	background-color: #000000;
+	background-color: rgba(0, 0, 0, 0.35);
+    bottom: 0;
+    color: #ffffff;
+    left: 0;
+    position: absolute;
+    right: 0;
+    padding: 10px;
+    transition: all 0.3s ease-in-out 0s;
+}
+
+.flex-caption p:last-child {
+	margin-bottom: 0px;
+}
+
+
+/*****************************************************
+					CONTENT
+*****************************************************/
+
+/* Extra small devices (phones, less than 768px) */
+/* No media query since this is the default in Bootstrap */
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+	.flexslider .flex-viewport {
+		z-index: 1;
+	}
+
+	.flex-direction-nav a:before,
+	.flex-direction-nav a.flex-next:before {
+		content: none;
+	}
+
+	.flex-direction-nav a {
+	}
+
+	.flexslider .flex-direction-nav .flex-next,
+	.flexslider .flex-direction-nav .flex-prev {
+		background-color: #31bfc4;
+		opacity: 1;
+		z-index: 0;
+	}
+
+	.flexslider .flex-direction-nav .flex-next {
+		right: 0px;
+	}
+	.flexslider .flex-direction-nav .flex-prev {
+		left: 0px;
+	}
+
+	.flexslider:hover .flex-direction-nav .flex-next {
+		right: -44px;
+		opacity: 1;
+		border-radius: 0px 6px 6px 0px;
+		-moz-border-radius: 0px 6px 6px 0px;
+		-webkit-border-radius: 0px 6px 6px 0px;
+	}
+
+	.flexslider:hover .flex-direction-nav .flex-prev {
+		left: -44px;
+		opacity: 1;
+		border-radius: 6px 0px 0px 6px;
+		-moz-border-radius: 6px 0px 0px 6px;
+		-webkit-border-radius: 6px 0px 0px 6px;
+	}
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+	html {
+		background-size: 100% auto;
+	}
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {}

@@ -7,7 +7,7 @@
     <meta name="author" content="Brad Phillips">
     <link rel="shortcut icon" href="assets/ico/favicon.png">
 
-    <title>Theme Template for Bootstrap</title>
+    <title>Brad &amp; Beth's Wedding!</title>
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.css" rel="stylesheet">
@@ -15,11 +15,10 @@
     <link href="css/bootstrap-theme.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/theme.css" rel="stylesheet">
-
-    <link href="js/fullPage.js/jquery.fullPage.css" rel="stylesheet">
-
-    <link href='http://fonts.googleapis.com/css?family=Shadows+Into+Light+Two' rel='stylesheet' type='text/css'>
+    <link href="font-awesome-4.3.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/fonts/architects-daughter/stylesheet.css" rel="stylesheet">
+    <link href="css/flexslider.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -30,55 +29,35 @@
 
   	<body>
 
-    
-		<div class="content container section intro">
-			<div class="logo">
-				<h1 class="brad-text">brad</h1>
-				<h1 class="and">&amp;</h1>
-				<h1 class="beth-text">beth</h1>
-			</div>
-			<div class="characters">
-				<div class="brad">
-					<!--
-					<img class="fixed" src="images/brad.svg">
-					<img class="gone" src="images/brad.svg">
-					-->
-					<span class="wrap fixed pose-normal"><a href="#breezy"></a></span>
-				</div>
+    <div class="content-wrap">
+		  <div class="content col-xs-12">
+        <div class="wire shadow"></div>
+        <div class="title col-lg-8 col-lg-push-2 col-md-10 col-md-push-1">
+          <h1 class="hidden-xs hidden-sm hidden-md hidden-lg">Brad &amp; Beth's Wedding!</h1>
+          <img class="" src="images/title.png" alt="Brad and Beth's Wedding!">
+        </div>
 
-				<div class="beth">
-					<!-- <img src="images/beth.svg"> -->
-					<span class="wrap pose-normal"><a href="#bephie"></a></span>
-				</div>
-			</div>
-		</div>
+        <div class="slider-wrap col-lg-6 col-lg-push-3 col-sm-8 col-sm-push-2 col-xs-12">
+          <div class="flexslider">
+            <ul class="slides">
+              <li>
+                <img class="shadow" src="images/2-cookies.png" />
+                <div class="flex-caption">
+                  <p>Mom made cookies :)</p>
+                </div>
+              </li>
+              <li>
+                <img class="shadow" src="images/3-moms-bunting.png" />
+              </li>
+              <li>
+                <img class="shadow" src="images/4-beths-glass-tables.png" />
+              </li>
+            </ul>
+          </div> <!-- close flexslider -->
+        </div> <!-- close slider-wrap -->
 
-		
-		<div class="section container about-brad">
-			<div class="logo">
-				<h1 class="brad-text">I'm brad..</h1>
-				<h1 class="and">&amp;</h1>
-				<h1 class="beth-text">beth</h1>
-			</div>
-			<div class="characters">
-			</div>
-		</div>
-		
-		<div class="section container about-beth">
-			<div class="logo">
-				<h1 class="brad-text">brad</h1>
-				<h1 class="and">&amp;</h1>
-				<h1 class="beth-text">I'm beth..</h1>
-			</div>
-			<div class="characters">
-
-				<div class="beth">
-					<!-- <img src="images/beth.svg"> -->
-					<span class="wrap"><a href="#introPage"></a></span>
-				</div>
-			</div>
-		</div>
-
+	 	  </div> <!-- close content -->
+    </div> <!-- close content-wrap -->
     		<!-- Bootstrap core JavaScript
     		================================================== -->
     		<!-- Placed at the end of the document so the pages load faster -->
@@ -88,10 +67,8 @@
 
 		<script src="js/jquery-ui.min.js"></script>
 
-		<!-- Full Screen Website Plugin -->
-		<script src="js/fullPage.js/jquery.fullPage.min.js"></script>
-		<script src="js/fullPage.js/vendors/jquery.slimscroll.min.js"></script>
+    <script src="js/jquery.flexslider-min.js"></script>
+    <script src="js/scripts.js"></script>
 		
-		<script src="js/scripts.js"></script>
 	</body>
 </html>
