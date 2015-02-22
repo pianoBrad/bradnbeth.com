@@ -65,6 +65,7 @@ html {
 }
 
 .flexslider img {
+	cursor: pointer;
 }
 
 .flexslider .slides > li {
