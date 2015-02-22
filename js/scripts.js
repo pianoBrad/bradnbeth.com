@@ -3,8 +3,14 @@ $(document).ready(function() {
   $('.flexslider').flexslider({
     animation: "slide",
     controlNav: false,
-    after: function(slider){
-      console.log('check fire');
+    start: function(slider) {
+    	var startHeight = slider.find('.slides li:first-child').outerHeight();
+    	slider.css('height', startHeight);
+    },
+    before: function(slider) {
+    	slider.css('height', "inherit");
+    	console.log('slider ready!');
+    	slider.removeClass('loading');
     }
   });
 
@@ -15,3 +21,10 @@ $(document).ready(function() {
   	$(this).find('.flex-caption').toggle();
   });
 });
+
+
+
+    /**
+    after: function(slider){
+      console.log('check fire');
+    }**/

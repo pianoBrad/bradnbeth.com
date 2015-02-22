@@ -64,6 +64,18 @@ html {
 	background-color: transparent;
 }
 
+.flexslider.loading > *{
+	visibility: hidden;
+}
+
+.flexslider.loading {
+	min-height: 300px;
+	background-color: #FFFFFF;
+	background-image: url("../images/loading.GIF");
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
 .flexslider img {
 	cursor: pointer;
 }
