@@ -9,7 +9,7 @@ html, body, .content-wrap, .content {
 }
 
 html {
-	background-image: url("../images/background.png");
+	background-image: url("../images/background.jpg");
 	background-position: center center;
 	background-size: auto 100%;
 }
@@ -82,6 +82,8 @@ html {
 
 .flexslider .slides > li {
 	position: relative;
+	display: block;
+	float: left;
 }
 
 .flex-direction-nav i {

@@ -1,4 +1,5 @@
 var pics = [];
+<<<<<<< HEAD
 var urls = [];
 var images = [];
 
@@ -20,12 +21,12 @@ var preLoadImages = function(urls, slider) {
 		$(images[i]).attr('src', urls[i]);
 	}
 }
+=======
+>>>>>>> dev
 
 var loadSlider = function() {
 	// Find out how many slides hard-coded into html page 
 	// and offset json doc to avoid duplicates
-	var offset = $('.slides li').size();
-	if (offset > 0) { cur_slide = (offset); }
 
 	$('.flexslider').flexslider({
     	animation: "slide",
@@ -33,7 +34,13 @@ var loadSlider = function() {
     	start: function(slider) {    		
     		var startHeight = slider.find('.slides li:first-child').outerHeight();
 
+<<<<<<< HEAD
     		preLoadImages(urls, slider);
+=======
+    		$(pics).each(function(index, pic) {
+    			slider.addSlide(pic);
+    		});
+>>>>>>> dev
     	},
     	before: function(slider) {
     		slider.css('height', "inherit");
@@ -43,6 +50,7 @@ var loadSlider = function() {
     	},
     	end: function(slider) {
     		// Slider reached end
+
     	}
   	});
 
@@ -59,7 +67,10 @@ $(document).ready(function() {
 	$.getJSON( "album.json", function( data ) {
 		
 		$.each( data.pictures, function(pic,info) {
+<<<<<<< HEAD
 			var cur_url = "";
+=======
+>>>>>>> dev
 
 			// Construct the slide element
 			var slide = "<li>"
