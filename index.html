@@ -29,6 +29,25 @@
 
     <body>
 
+    <div class="pre-load">
+    <script type="text/javascript">
+    <!--//--><![CDATA[//><!--
+      var images = new Array()
+      function preload() {
+        for (i = 0; i < preload.arguments.length; i++) {
+          images[i] = new Image()
+          images[i].src = preload.arguments[i]
+        }
+      }
+      preload(
+        "images/background.png",
+        "images/loading.GIF",
+        "images/title.png"
+      )
+    //--><!]]>
+    </script>
+  </div>
+
     <div class="content-wrap">
       <div class="content col-xs-12">
         <div class="wire shadow"></div>
@@ -48,6 +67,9 @@
               </li>
               <li>
                 <img class="shadow" src="images/3-moms-bunting.jpg" />
+                <div class="flex-caption">
+                  <p>..and this beautiful ribbon runner!</p>
+                </div>
               </li>
               <li>
                 <img class="shadow" src="images/4-beths-glass-tables.jpg" />
