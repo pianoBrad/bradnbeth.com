@@ -7,15 +7,19 @@ var loadSlider = function() {
 	$('.flexslider').flexslider({
     	animation: "slide",
     	controlNav: false,
-    	start: function(slider) {    		
+    	start: function(slider) {
+    		/**    		
     		var startHeight = slider.find('.slides li:first-child').outerHeight();
 
     		$(pics).each(function(index, pic) {
     			slider.addSlide(pic);
     		});
+			**/
     	},
     	before: function(slider) {
+    		/**
     		slider.css('height', "inherit");
+    		**/
     		slider.removeClass('loading');
     	},
     	after: function(slider) {
@@ -36,6 +40,8 @@ var loadSlider = function() {
 
 $(document).ready(function() {
 
+	loadSlider();
+	/**
 	$.getJSON( "album.json", function( data ) {
 		
 		$.each( data.pictures, function(pic,info) {
@@ -58,5 +64,6 @@ $(document).ready(function() {
 		// getJSON complete, let's load flexslider now.
 		loadSlider();
 	});
+	**/
 
 });
