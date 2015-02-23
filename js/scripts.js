@@ -1,26 +1,27 @@
 var pics = [];
-var cur_slide = 0;
-var slides_batch = 5;
+var urls = [];
+var images = [];
 
-var getPhotos = function() {
-	var slides = "";
-	var start_slide = cur_slide;
+var preLoadImages = function(urls, slider) {
+	for (i = 0; i < urls.length; i++) {
+		images[i] = new Image();
+		$(images[i]).on('load', function() {
+			var pic_index = $.inArray($(this).attr('src'), urls);
+			if (pic_index > -1) {
+				if (pic_index == 0) {
+					$('.slides li').each(function() {
+						slider.removeSlide($(this));
+					});
+				}
+				slider.addSlide(pics[pic_index]);
+			}
+		})
 
-	for (var i = start_slide; i < (start_slide + slides_batch); i++) {
-		slides += pics[cur_slide];
-
-		cur_slide++;
+		$(images[i]).attr('src', urls[i]);
 	}
-
-	return slides;
-
 }
 
 var loadSlider = function() {
-	/**
-	$(pics).each(function( pic, info ) {
-		console.log(pic);
-	});**/
 	// Find out how many slides hard-coded into html page 
 	// and offset json doc to avoid duplicates
 	var offset = $('.slides li').size();
@@ -31,34 +32,14 @@ var loadSlider = function() {
     	controlNav: false,
     	start: function(slider) {    		
     		var startHeight = slider.find('.slides li:first-child').outerHeight();
-    		//slider.css('height', startHeight - 8);
-    		//slider.css('max-height', startHeight - 8);
+
+    		preLoadImages(urls, slider);
     	},
     	before: function(slider) {
     		slider.css('height', "inherit");
     		slider.removeClass('loading');
     	},
     	after: function(slider) {
-    		console.log(slider.currentSlide + 1);
-    		console.log(slider.count);
-
-    		if ( slider.count - (slider.currentSlide + 1) <= 1 ) {
-
-    			if ( cur_slide < pics.length ) {
-
-    			var start_slide = cur_slide;
-    			for (var i = start_slide; i < (start_slide + slides_batch); i++) {
-    				if(pics[cur_slide]) {
-    					console.log(pics[cur_slide]);
-    					slider.addSlide(pics[cur_slide]);
-    				}
-
-    				cur_slide++;
-    			}
-
-    			}
-
-    		}
     	},
     	end: function(slider) {
     		// Slider reached end
@@ -78,12 +59,14 @@ $(document).ready(function() {
 	$.getJSON( "album.json", function( data ) {
 		
 		$.each( data.pictures, function(pic,info) {
-			//console.log("key: " + key + " " + "val: " + val);
-			//pics.push(info);
+			var cur_url = "";
 
-			//Construct the slide element
+			// Construct the slide element
 			var slide = "<li>"
-			if (info.url) { slide += '<img src="' + info.url + '" />'; }
+			if (info.url) { 
+				cur_url += info.url;
+				slide += '<img src="' + info.url + '" />'; 
+			}
 			if (info.caption) { 
 				slide += '<div class="flex-caption">';
 					slide+= '<p>' + info.caption + '</p>';
@@ -91,6 +74,7 @@ $(document).ready(function() {
 			}
 			slide += "</li>";
 
+			urls.push(cur_url);
 			pics.push(slide);
 
 		});
