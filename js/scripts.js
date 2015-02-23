@@ -33,8 +33,8 @@ var loadSlider = function() {
   	$('.flexslider .flex-direction-nav .flex-prev').html('<i class="fa fa-angle-double-left"></i>');
 	$('.flexslider .flex-direction-nav .flex-next').html('<i class="fa fa-angle-double-right"></i>');
 
-	$('.flex-active-slide').click(function() {
-  		$(this).find('.flex-caption').toggle();
+	$('.slides li').click(function() {
+		$(this).find('.flex-caption').toggle();
 	});
 }
 
