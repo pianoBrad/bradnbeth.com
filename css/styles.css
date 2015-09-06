@@ -78,6 +78,13 @@ body {
 .bar.right {
 	right: 0px;
 }
+.seperator {
+	border-top-width:5px;	
+    border-top-style:dashed;
+    border-color: rgba(86, 58, 20, 0.5);
+    margin: 15px -5px;
+}
+
 
 /*****************************************************
 					CONTENT
@@ -117,6 +124,7 @@ body {
 .info .icon span > *:last-child {
 	/**color: rgba(86, 58, 20, 1);**/
 	color: rgba(146, 121, 94, 0.9);
+	color: #eceae4;
 }
 .info .icon:hover {
 	cursor: pointer;
@@ -133,7 +141,8 @@ body {
 	background-color:rgba(86, 58, 20, 0.5);
 	color: #eceae4;
 	padding: 10px;
-	text-align: center;
+}
+.info .title .wrap {
 }
 .info .title i {
 	padding-right: 10px;
@@ -250,6 +259,13 @@ body {
 					CONTENT
 *****************************************************/
 
+@media (min-width: 480px) {
+	.info .title .wrap {
+		position: relative;
+		left: 25%;
+	}
+}
+
 /* Extra small devices (phones, less than 768px) */
 /* No media query since this is the default in Bootstrap */
 
@@ -258,6 +274,10 @@ body {
  	.info .title {
  		text-align: left;
  	}
+ 	.info .title .wrap {
+		position: relative;
+		left: 0%;
+	}
 
 	.flexslider .flex-viewport {
 		z-index: 1;
