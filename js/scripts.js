@@ -66,4 +66,9 @@ $(document).ready(function() {
 	});
 	**/
 
+	$(".reception .icon").click(function(e) {
+  		$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+  		e.preventDefault();
+	});
+
 });

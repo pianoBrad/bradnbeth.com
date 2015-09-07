@@ -30,7 +30,15 @@ body {
 
 .stripes {
 	background-color: #eceae4;
-	background-image: repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(209,226,226,1) 40px, rgba(209,226,226,1) 80px);
+	background-image: repeating-linear-gradient(-45deg, transparent, transparent 40px, rgba(209,226,226,1) 40px, rgba(209,226,226,1) 80px)!important;
+}
+html.stripes {
+	height: auto;
+	min-height: 100%;
+}
+
+.stripes body {
+	background-color: transparent;
 }
 
 .nav-arrow-right {
@@ -46,12 +54,16 @@ body {
 	font-family: 'Open Sans', sans-serif;
 }
 .walter h1, .walter h2, .walter h3, 
-.walter h4, .walter h5, .walter h6 {
+.walter h4, .walter h5, .walter h6,
+.footer {
 	font-family: 'Walter Turncoat', cursive;
 }
 
 .body-kreon {
 	font-family: 'Kreon', serif;
+}
+.body-open-sans {
+	font-family: 'Open Sans', sans-serif;
 }
 
 /** Available weights: 300, 400, 600, 700 **/
@@ -104,19 +116,88 @@ body {
 	color: rgba(57, 178, 178, 0.5);
 }
 
+.header .beth.social-media {
+	text-align: right;
+}
+
 .header .logo {
 	text-align: center;
+	margin-top: 0px;
 }
 .header .logo > span {
-	padding: 10px;
+	padding: 10px 0px;
+}
+.header .logo .fa-tag {
+	font-size: 1.5em;
+}
+.header .logo .amp-wrap {
+	position: relative;
+	padding: 10px 0px;
+}
+.header .logo .amp {
+	bottom: 0.7em;
+    color: #eceae4;
+    font-size: 0.9em;
+    left: 0.5em;
+    position: absolute;
+}
+
+.header .twine-bow {
+	background-image: url("../images/assets/twine-tile-seamless-transparent.png");
+    background-position: left 25px;
+    background-repeat: repeat-x;
+    background-size: 80px auto;
+    text-align: center;
+    width: calc(100% - 20px);
+    left: 10px;
+}
+.header .twine-bow img {
+	height: 125px;
+	width: auto;
 }
 
 .main {
 }
 
+.stripes a {
+	color: rgba(57, 178, 178, 0.5);
+}
+.stripes a:hover {
+	color: rgba(86, 58, 20, 0.5);
+}
+
 .info .icon {
 	font-size:2.5em;
 	text-align:center;
+}
+.info .body .icon {
+	font-size: 1em;
+}
+.info .body .icon {
+	float: left;
+    left: 0;
+    padding: 0 10px 0 0;
+    position: absolute;
+    top: 0;
+}
+.info .body .icon:hover {
+	cursor: default;
+}
+.info .body .icon i {
+	color: 	rgba(86, 58, 20, 0.5);
+}
+.info .body .text {
+	color: rgba(86, 58, 20, 0.75);
+    float: left;
+    margin-left: 3em;
+    margin-top: 0.5em;
+    position: relative;
+}
+.info .body .info-row {
+	margin-bottom: 10px;
+    min-height: 2.75em;
+    overflow: auto;
+    position: relative;
 }
 .info .icon span {
 	color: rgba(57, 178, 178, 0.5);
@@ -141,6 +222,8 @@ body {
 	background-color:rgba(86, 58, 20, 0.5);
 	color: #eceae4;
 	padding: 10px;
+	margin-bottom: 10px;
+	font-size: 20px;
 }
 .info .title .wrap {
 }
@@ -255,8 +338,19 @@ body {
 	opacity: 1;
 }
 
+footer.row {
+	background-color: rgba(86, 58, 20, 0.5);
+	margin: 15px -5px 0px;
+	color: rgba(236, 234, 228, 1);
+	padding: 15px 0px;
+}
+.stripes footer a {
+	color: rgb(236, 234, 228);
+}
+footer > * { text-align: center; }
+
 /*****************************************************
-					CONTENT
+					MEDIA QUERIES
 *****************************************************/
 
 @media (min-width: 480px) {
@@ -270,7 +364,20 @@ body {
 /* No media query since this is the default in Bootstrap */
 
 /* Small devices (tablets, 768px and up) */
-@media (min-width: 768px) {
+@media (min-width: 768px) { 
+	.header .twine-bow {
+		background-image: url("../images/assets/twine-tile-seamless-transparent.png");
+    	background-position: left 40px;
+    	background-repeat: repeat-x;
+    	background-size: 125px auto;
+    	text-align: center;
+	}
+
+	.header .twine-bow img {
+		height: 200px;
+		width: auto;
+	}
+
  	.info .title {
  		text-align: left;
  	}
@@ -318,6 +425,8 @@ body {
 		padding-left: 10px;
 		padding-right: 10px;
 	}
+	footer > * { text-align: left; }
+	footer .links { text-align: center; }
 }
 
 /* Medium devices (desktops, 992px and up) */
@@ -325,7 +434,15 @@ body {
 	html {
 		background-size: 100% auto;
 	}
+
+	.info .title {
+		font-size: 22px;
+	}
 }
 
 /* Large devices (large desktops, 1200px and up) */
-@media (min-width: 1200px) {}
+@media (min-width: 1200px) {
+	.info .title {
+		font-size: 24px;
+	}
+}
