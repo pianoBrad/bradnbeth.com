@@ -426,7 +426,7 @@ footer > * { text-align: center; }
 		padding-right: 10px;
 	}
 	footer > * { text-align: left; }
-	footer .links { text-align: center; }
+	footer .links { text-align: right; }
 }
 
 /* Medium devices (desktops, 992px and up) */
