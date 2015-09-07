@@ -120,6 +120,10 @@ html.stripes {
 	text-align: right;
 }
 
+.header .fa-inverse {
+	color: #eceae4;
+}
+
 .header .logo {
 	text-align: center;
 	margin-top: 0px;
