@@ -203,6 +203,9 @@ html.stripes {
     overflow: auto;
     position: relative;
 }
+.info .body .info-row .text p:last-child {
+	margin-bottom: 0px;
+}
 .info .icon span {
 	color: rgba(57, 178, 178, 0.5);
 }
